@@ -1,0 +1,38 @@
+{# templates/admin/users.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Utilisateurs{% endblock %}
+
+{% block body %}
+  <h1>Liste des Utilisateurs</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Rôle</th>
+        <th>Action</th> {# Ajout de la colonne pour l'action Supprimer #}
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td>
+            <form action="{{ path('admin_user_delete', {'id': user.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
+              <input type="hidden" name="_method" value="DELETE"> {# Utilisation de la méthode DELETE #}
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

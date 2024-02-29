@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BiologicalData index{% endblock %}
+
+{% block body %}
+    <h1>BiologicalData index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Timestamp</th>
+                <th>MeasurementType</th>
+                <th>Value</th>
+                <th>PatientName</th>
+                <th>PatientLastName</th>
+                <th>PatientAge</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for biological_datum in biological_datas %}
+            <tr>
+                <td>{{ biological_datum.id }}</td>
+                <td>{{ biological_datum.timestamp ? biological_datum.timestamp|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ biological_datum.measurementType }}</td>
+                <td>{{ biological_datum.value }}</td>
+                <td>{{ biological_datum.patientName }}</td>
+                <td>{{ biological_datum.PatientLastName }}</td>
+                <td>{{ biological_datum.patientAge }}</td>
+                <td>
+                    <a href="{{ path('app_medication_show', {'id': biological_datum.id}) }}">show</a>
+                    <a href="{{ path('app_medication_edit', {'id': biological_datum.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_medication_new') }}">Create new</a>
+{% endblock %}

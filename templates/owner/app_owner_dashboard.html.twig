@@ -1,0 +1,106 @@
+{% block title %}Owner Dashboard{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        /* Vos styles CSS ici */
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container center-content">
+        <h2>Welcome to the Owner Dashboard</h2>
+        <p class="lead">Here you can manage your properties, view reports, and perform other owner-specific actions.</p>
+
+        <div id="userInfo" class="hidden">
+            <h3 class="mt-5">User Information</h3>
+            <p id="displayFirstName">First Name: {{ app.user.firstName }}</p>
+            <p id="displayLastName">Last Name: {{ app.user.lastName }}</p>
+            <p id="displayEmail">Email: {{ app.user.email }}</p>
+        </div>
+
+        <h3 class="mt-5">Bracelet Information</h3>
+        <strong>Code: <span id="code">{{ code }}</span></strong>
+        <button onclick="changeCode()">Change Code</button>
+
+        <!-- Formulaire pour envoyer le code par e-mail -->
+        <form id="sendCodeByEmailForm">
+            <input type="email" id="emailRecipient" name="emailRecipient" placeholder="Enter Email Address">
+            <button type="button" id="sendCodeByEmail">Send Code by Email</button>
+        </form>
+
+        <!-- Bouton pour créer un rendez-vous -->
+        <a href="{{ path('app_appointment_new') }}" class="btn btn-primary">Créer un rendez-vous</a>
+
+        <table class="custom-table mt-3">
+            <thead>
+                <tr>
+                    <th>Temperature</th>
+                    <th>Blood Pressure</th>
+                    <th>Heart Rate</th>
+                    <th>Movement</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>GPS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bracelet in braceletData %}
+                    <tr>
+                        <td>{{ bracelet.temperature }}</td>
+                        <td>{{ bracelet.bloodPressure }}</td>
+                        <td>{{ bracelet.heartRate }}</td>
+                        <td>{{ bracelet.movement }}</td>
+                        <td>{{ bracelet.latitude }}</td>
+                        <td>{{ bracelet.longitude }}</td>
+                        <td>{{ bracelet.gps }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function changeCode() {
+            // Effectuer une requête AJAX pour générer un nouveau code
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '{{ path('app_generate_code') }}', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Mettre à jour le code affiché dans le HTML
+                    document.getElementById('code').innerText = xhr.responseText;
+                    alert('Code changed successfully.');
+                } else {
+                    alert('Failed to change code.');
+                }
+            };
+            xhr.send();
+        }
+
+        // Envoyer le formulaire au clic sur le bouton "Send Code by Email"
+        document.getElementById('sendCodeByEmail').addEventListener('click', function(event) {
+            event.preventDefault(); // Empêcher le comportement par défaut du bouton
+            
+            // Récupérer l'adresse e-mail saisie par l'utilisateur
+            var emailRecipient = document.getElementById('emailRecipient').value;
+            if (!emailRecipient) {
+                alert('Please enter an email address.');
+                return;
+            }
+            
+            // Créer un formulaire pour envoyer les données par POST
+            var form = document.createElement('form');
+            form.action = "{{ path('app_send_code') }}";
+            form.method = 'POST';
+            
+            // Ajouter un champ caché pour l'adresse e-mail du destinataire
+            var emailInput = document.createElement('input');
+            emailInput.type = 'hidden';
+            emailInput.name = 'emailRecipient';
+            emailInput.value = emailRecipient;
+            form.appendChild(emailInput);
+            
+            document.body.appendChild(form);
+            form.submit();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,41 @@
+
+
+{% block title %}Hospital index{% endblock %}
+
+{% block body %}
+    <h1>Hospital index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for hospital in hospitals %}
+            <tr>
+                <td>{{ hospital.id }}</td>
+                <td>{{ hospital.name }}</td>
+                <td>{{ hospital.address }}</td>
+                <td>{{ hospital.latitude }}</td>
+                <td>{{ hospital.longitude }}</td>
+                <td>
+                    <a href="{{ path('app_hospital_show', {'id': hospital.id}) }}">show</a>
+                    <a href="{{ path('app_hospital_edit', {'id': hospital.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_hospital_new') }}">Create new</a>
+{% endblock %}
