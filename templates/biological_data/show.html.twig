@@ -1,0 +1,77 @@
+
+
+{% block title %}Biological Data{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="card bg-light">
+            <h1 class="card-header text-primary">Biological Data</h1>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <tbody>
+                        {# Display biological data #}
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ biological_datum.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Timestamp</th>
+                            <td>{{ biological_datum.timestamp ? biological_datum.timestamp|date('Y-m-d H:i:s') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Measurement Type</th>
+                            <td>{{ biological_datum.measurementType }}</td>
+                        </tr>
+                        <tr>
+                            <th>Value</th>
+                            <td>{{ biological_datum.value }}</td>
+                        </tr>
+                        <tr>
+                            <th>Patient Name</th>
+                            <td>{{ biological_datum.patientName }}</td>
+                        </tr>
+                        <tr>
+                            <th>Patient Last Name</th>
+                            <td>{{ biological_datum.patientLastName }}</td>
+                        </tr>
+                        <tr>
+                            <th>Patient Age</th>
+                            <td>{{ biological_datum.patientAge }}</td>
+                        </tr>
+                        <tr>
+                            <th>Disease</th>
+                            <td>{{ biological_datum.disease }}</td>
+                        </tr>
+                        <tr>
+                            <th>Other Information</th>
+                            <td>{{ biological_datum.otherInformation }}</td>
+                        </tr>
+                        
+                        {# Display bracelet data if available #}
+                        {% if bracelet %}
+                            <tr>
+                                <th>Bracelet Data</th>
+                                <td>
+                                    Temperature: {{ bracelet.temperature }}<br>
+                                    Blood Pressure: {{ bracelet.bloodPressure }}<br>
+                                    Heart Rate: {{ bracelet.heartRate }}<br>
+                                    Movement: {{ bracelet.movement }}<br>
+                                    GPS: {{ bracelet.gps }}<br>
+                                    Latitude: {{ bracelet.latitude }}<br>
+                                    Longitude: {{ bracelet.longitude }}<br>
+                                    {# Display other bracelet attributes if necessary #}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+
+                <a href="{{ path('app_biological_data_index') }}" class="btn btn-primary">Back to list</a>
+
+                <a href="{{ path('app_biological_data_edit', {'id': biological_datum.id}) }}" class="btn btn-primary">Edit</a>
+
+                {{ include('biological_data/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

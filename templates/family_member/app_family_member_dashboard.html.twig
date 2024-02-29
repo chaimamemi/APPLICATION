@@ -1,0 +1,133 @@
+
+
+{% block title %}Hello!{% endblock %}
+
+{% block stylesheets %}
+
+    <style>
+        .custom-table {
+            background-color: #e9f5fc;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .custom-table th, .custom-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .custom-table th {
+            background-color: #3498db;
+            color: white;
+        }
+        .center-content {
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .hidden {
+            display: none;
+        }
+        .edit-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container center-content">
+        <h1>Welcome to the Family Member Dashboard</h1>
+        
+        {% if ownerAccessCode is defined %}
+            <h2 class="mt-5">Owner Dashboard Data</h2>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Temperature</th>
+                            <th>Blood Pressure</th>
+                            <th>Heart Rate</th>
+                            <th>Movement</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bracelet in braceletData %}
+                            <tr>
+                                <td>{{ bracelet.temperature }}</td>
+                                <td>{{ bracelet.bloodPressure }}</td>
+                                <td>{{ bracelet.heartRate }}</td>
+                                <td>{{ bracelet.movement }}</td>
+                                <td>{{ bracelet.latitude }}</td>
+                                <td>{{ bracelet.longitude }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            {% if familyMemberName is defined %}
+                <h2 class="mt-5">Family Member Dashboard Data</h2>
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Temperature</th>
+                                <th>Blood Pressure</th>
+                                <th>Heart Rate</th>
+                                <th>Movement</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bracelet in braceletData %}
+                                <tr>
+                                    <td>{{ bracelet.temperature }}</td>
+                                    <td>{{ bracelet.bloodPressure }}</td>
+                                    <td>{{ bracelet.heartRate }}</td>
+                                    <td>{{ bracelet.movement }}</td>
+                                    <td>{{ bracelet.latitude }}</td>
+                                    <td>{{ bracelet.longitude }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                {% if error_message is defined %}
+                    <div class="alert alert-danger mt-5" role="alert">
+                        {{ error_message }}
+                    </div>
+                {% endif %}
+                
+                <form method="post" class="mt-5">
+                    <div class="form-group">
+                        <label for="access_code">Enter Owner's Access Code:</label>
+                        <input type="text" id="access_code" name="access_code" class="form-control" required>
+                    </div>
+                    {% if not ownerAccessCode is defined %}
+                        <div class="form-group">
+                            <label for="family_member_name">Your Name:</label>
+                            <input type="text" id="family_member_name" name="family_member_name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="relation_with_owner">Relation with Owner:</label>
+                            <input type="text" id="relation_with_owner" name="relation_with_owner" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    {% endif %}
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

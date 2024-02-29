@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block body %}
+    <h1>Doctor Dashboard</h1>
+
+    <!-- Include the index view -->
+    {% include 'biological_data/index.html.twig' %}
+
+    <!-- Include the new view -->
+    {% include 'biological_data/new.html.twig' %}
+
+    <!-- Include the edit view -->
+    {% include 'biological_data/edit.html.twig' %}
+
+    <!-- Include the show view -->
+    {% include 'biological_data/show.html.twig' %}
+{% endblock %}

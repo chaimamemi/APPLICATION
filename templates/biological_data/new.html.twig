@@ -1,0 +1,26 @@
+
+
+{% block title %}New BiologicalData{% endblock %}
+
+{% block body %}
+    <h1>Create new BiologicalData</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.timestamp) }}
+    {{ form_row(form.measurementType) }}
+    {{ form_row(form.value) }}
+    {{ form_row(form.patientName) }}
+    {{ form_row(form.patientLastName) }}
+    {{ form_row(form.patientAge) }}
+
+   
+
+    {{ form_row(form.medication) }}
+    {{ form_row(form.disease) }}
+    {{ form_row(form.otherInformation) }}
+
+    <button type="submit">Create</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_biological_data_index') }}">back to list</a>
+{% endblock %}
