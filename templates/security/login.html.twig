@@ -18,7 +18,7 @@
         /* Styles pour la carte de connexion */
         .login-card {
             max-width: 400px;
-            background-color: rgba(255, 255, 255, 0.8); /* Arrière-plan semi-transparent pour le contenu */
+            background-color: rgba(0, 0, 0, 0.5); /* Arrière-plan semi-transparent noir */
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -26,7 +26,7 @@
 
         /* Styles pour le titre de la carte */
         .card-title {
-            color: #333;
+            color: #fff; /* Couleur de texte blanc */
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 30px;
@@ -40,6 +40,7 @@
             margin-bottom: 20px;
             font-size: 16px;
             transition: border-color 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.5); /* Arrière-plan semi-transparent blanc */
         }
         .form-control:focus {
             border-color: #007bff;
@@ -48,8 +49,9 @@
 
         /* Styles pour le bouton de connexion */
         .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: black; /* Couleur de fond noire */
+            color: white; /* Couleur de texte blanc */
+            border-color: black; /* Couleur de bordure noire */
             border-radius: 5px;
             padding: 12px 20px;
             font-size: 18px;
@@ -57,8 +59,8 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
+            background-color: #333; /* Couleur de fond plus sombre au survol */
+            border-color: #333; /* Couleur de bordure plus sombre au survol */
         }
     </style>
 {% endblock %}
@@ -66,7 +68,7 @@
 {% block body %}
     <div class="login-container">
         <div class="login-card">
-            <h1 class="card-title">Log in</h1>
+            <h1 class="card-title">LOG IN</h1>
             <form action="{{ path('app_login') }}" method="post" novalidate>
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -78,19 +80,19 @@
                     </div>
                 {% endif %}
 
-                <div class="mb-3">
+                <div class="form-group">
                     <label for="inputEmail" class="sr-only">Email address</label>
                     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Enter your email address" autocomplete="email" required autofocus>
                 </div>
 
-                <div class="mb-3">
+                <div class="form-group">
                     <label for="inputPassword" class="sr-only">Password</label>
                     <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
                 </div>
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+                <button class="btn btn-primary btn-block" type="submit">LOG IN</button>
             </form>
         </div>
     </div>
