@@ -1,66 +1,65 @@
-
-
 {% block title %}{% endblock %}
 
 {% block css %}
     <style>
-        /* Styles pour le conteneur de la page de connexion */
         .login-container {
             background-image: url('{{ asset('front-office/assets/img/bckground.jpg') }}');
             background-size: cover;
             background-position: center;
-            height: 100vh; /* Pour remplir toute la hauteur de l'écran */
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Styles pour la carte de connexion */
         .login-card {
             max-width: 400px;
-            background-color: rgba(0, 0, 0, 0.5); /* Arrière-plan semi-transparent noir */
+            background-color: rgba(255, 255, 255, 0.5);
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin: auto;
         }
 
-        /* Styles pour le titre de la carte */
         .card-title {
-            color: #fff; /* Couleur de texte blanc */
+            color: #fff;
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 30px;
         }
 
-        /* Styles pour les champs de formulaire */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
         .form-control {
             border: 1px solid #ced4da;
             border-radius: 5px;
-            padding: 12px 15px;
-            margin-bottom: 20px;
+            padding: 15px;
             font-size: 16px;
             transition: border-color 0.3s ease;
-            background-color: rgba(255, 255, 255, 0.5); /* Arrière-plan semi-transparent blanc */
+            background-color: rgba(255, 255, 255, 0.5);
         }
+
         .form-control:focus {
             border-color: #007bff;
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         }
 
-        /* Styles pour le bouton de connexion */
         .btn-primary {
-            background-color: black; /* Couleur de fond noire */
-            color: white; /* Couleur de texte blanc */
-            border-color: black; /* Couleur de bordure noire */
+            background-color: black;
+            color: white;
+            border-color: black;
             border-radius: 5px;
             padding: 12px 20px;
             font-size: 18px;
             font-weight: bold;
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
+
         .btn-primary:hover {
-            background-color: #333; /* Couleur de fond plus sombre au survol */
-            border-color: #333; /* Couleur de bordure plus sombre au survol */
+            background-color: #333;
+            border-color: #333;
         }
     </style>
 {% endblock %}
@@ -80,19 +79,25 @@
                     </div>
                 {% endif %}
 
-                <div class="form-group">
-                    <label for="inputEmail" class="sr-only">Email address</label>
-                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Enter your email address" autocomplete="email" required autofocus>
+                <div class="form-group row">
+                    <label for="inputEmail" class="col-sm-3 col-form-label">Email address</label>
+                    <div class="col-sm-9">
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Enter your email address" autocomplete="email" required autofocus>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
+                    <div class="col-sm-9">
+                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
+                    <button class="btn btn-primary btn-block" type="submit">LOG IN</button>
                 </div>
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-                <button class="btn btn-primary btn-block" type="submit">LOG IN</button>
             </form>
         </div>
     </div>
