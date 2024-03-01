@@ -1,28 +1,64 @@
+{% extends 'base.html.twig' %}
+
 {% block body %}
-    <h1>Register</h1>
-
-    {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
-        {{ form_row(registrationForm.firstName) }}
-        {{ form_row(registrationForm.lastName) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password',
-            attr: {
-                pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$',
-                title: 'Password must contain at least one uppercase letter, one lowercase letter, and one digit, and be at least 6 characters long.'
-            }
-        }) }}
-        {{ form_row(registrationForm.confirmPassword, {
-            label: 'Confirm Password'
-        }) }}
-        {{ form_row(registrationForm.profilePicture) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-        {{ form_row(registrationForm.role) }}
-
-        {% if registrationForm.bracelet is defined %}
-            {{ form_row(registrationForm.bracelet) }}
-        {% endif %}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+    <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+        <div class="bg-light rounded p-5">
+            <h2 class="text-center mb-4">Register</h2>
+            <form action="{{ path('app_register') }}" method="post">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'Your First Name'}}) }}
+                            <label for="firstName">Your First Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Your Last Name'}}) }}
+                            <label for="lastName">Your Last Name</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Your Email'}}) }}
+                            <label for="email">Your Email</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(registrationForm.plainPassword, {'label': 'Password', 'attr': {'class': 'form-control', 'placeholder': 'Your Password', 'pattern': '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$', 'title': 'Password must contain at least one uppercase letter, one lowercase letter, and one digit, and be at least 6 characters long.'}}) }}
+                            <label for="plainPassword">Password</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(registrationForm.confirmPassword, {'label': 'Confirm Password', 'attr': {'class': 'form-control', 'placeholder': 'Confirm Password'}}) }}
+                            <label for="confirmPassword">Confirm Password</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(registrationForm.profilePicture, {'attr': {'class': 'form-control'}}) }}
+                            <label for="profilePicture">Profile Picture</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(registrationForm.role, {'attr': {'class': 'form-select'}}) }}
+                            <label for="role">Role</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            {{ form_widget(registrationForm.agreeTerms, {'label_attr': {'class': 'form-check-label'}, 'attr': {'class': 'form-check-input'}}) }}
+                            <label class="form-check-label" for="{{ registrationForm.agreeTerms.vars.id }}">Agree to Terms</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary w-100 py-3" type="submit">Register</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

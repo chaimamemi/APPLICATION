@@ -1,29 +1,97 @@
-{% block title %}Log in!{% endblock %}
+
+
+{% block title %}{% endblock %}
+
+{% block css %}
+    <style>
+        /* Styles pour le conteneur de la page de connexion */
+        .login-container {
+            background-image: url('{{ asset('front-office/assets/img/bckground.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            height: 100vh; /* Pour remplir toute la hauteur de l'écran */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Styles pour la carte de connexion */
+        .login-card {
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.8); /* Arrière-plan semi-transparent pour le contenu */
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styles pour le titre de la carte */
+        .card-title {
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        /* Styles pour les champs de formulaire */
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* Styles pour le bouton de connexion */
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 5px;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div class="login-container">
+        <div class="login-card">
+            <h1 class="card-title">Log in</h1>
+            <form action="{{ path('app_login') }}" method="post" novalidate>
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="inputEmail" class="sr-only">Email address</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Enter your email address" autocomplete="email" required autofocus>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+            </form>
         </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Enter your email address" autocomplete="email" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Enter your password" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+    </div>
 {% endblock %}
