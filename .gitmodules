@@ -1,0 +1,3 @@
+[submodule "APPLICATION"]
+	path = APPLICATION
+	url = https://github.com/chaimamemi/APPLICATION.git
