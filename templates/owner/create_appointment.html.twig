@@ -1,0 +1,84 @@
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">MAKE APPOINTMENT</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        <div class="form-group">
+                            {{ form_label(form.dateTime, 'Date & Time') }}
+                            {{ form_widget(form.dateTime, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.description, 'Description') }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.doctor, 'Doctor') }}
+                            {{ form_widget(form.doctor, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                       
+                        <!-- Affichage du prénom, du nom de famille et de l'e-mail de l'utilisateur -->
+                        <div class="form-group">
+                            <label for="firstName">First Name:</label>
+                            <input type="text" id="firstName" value="{{ app.user.firstname }}" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" id="lastName" value="{{ app.user.lastname }}" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="text" id="email" value="{{ app.user.email }}" class="form-control" readonly>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Send</button>
+                        {{ form_end(form) }}
+
+                        <div class="back-button">
+                            <a href="{{ path('app_owner_dashboard') }}" class="btn btn-secondary">Back to your Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{# Envoi des informations au tableau de bord du médecin #}
+<script>
+    // Récupérer les informations du formulaire
+    var firstName = document.getElementById("firstName").value;
+    var lastName = document.getElementById("lastName").value;
+    var email = document.getElementById("email").value;
+    var dateTime = document.getElementById("dateTime").value; // Ajoutez l'ID correct si nécessaire
+    var description = document.getElementById("description").value; // Ajoutez l'ID correct si nécessaire
+
+    // Envoi des informations au tableau de bord du médecin
+    var data = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        dateTime: dateTime,
+        description: description
+    };
+
+    // Vous devez utiliser une méthode appropriée pour envoyer les données au serveur, comme fetch ou XMLHttpRequest
+    fetch('/send_appointment_data_to_doctor_dashboard', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+</script>

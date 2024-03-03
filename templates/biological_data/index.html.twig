@@ -1,11 +1,11 @@
-{% block title %}Biological Data Index{% endblock %}
-
 {% block body %}
     <h1>Biological Data Index</h1>
     {% if biological_datas is not empty %}
         <select id="biological_data_select">
             {% for biological_datum in biological_datas %}
-                <option value="{{ path('app_biological_data_show', {'id': biological_datum.id}) }}">{{ biological_datum.id }}</option>
+                <option value="{{ path('app_biological_data_show', {'id': biological_datum.id}) }}">
+                    {{ biological_datum.patientName }} {{ biological_datum.patientLastName }}
+                </option>
             {% endfor %}
         </select>
         <button onclick="redirectToSelected()">Show</button>

@@ -5,6 +5,8 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -121,6 +123,20 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+
+            ->add('phoneNumber', TextType::class, [
+                'label' => 'Phone Number',
+                'constraints' => [
+                    new Length([
+                        'min' => 8,
+                        'minMessage' => 'The phone number must be at least {{ limit }} characters long',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'e.g. 2150623658',
+                ],
+            ])
+            
             ->add('role', ChoiceType::class, [
                 'choices' => [
                     'Select your role' => '',

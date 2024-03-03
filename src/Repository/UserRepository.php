@@ -21,6 +21,15 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function findAllExceptCurrentUser(User $currentUser): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u != :currentUser')
+            ->setParameter('currentUser', $currentUser)
+            ->getQuery()
+            ->getResult();
+    }
+    
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

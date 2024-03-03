@@ -1,0 +1,53 @@
+{% extends 'date.html.twig' %}
+{# owner_calendar.html.twig #}
+
+
+{% block title %}Owner Calendar{% endblock %}
+
+{% block body %}
+    <div id="calendrier"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let calendarElt = document.querySelector("#calendrier");
+
+            let calendar = new FullCalendar.Calendar(calendarElt, {
+                initialView: 'timeGridWeek',
+                locale: 'fr',
+                timeZone: 'Europe/Paris',
+                headerToolbar: {
+                    start: 'prev,next today',
+                    center: 'title',
+                    end: 'dayGridMonth,timeGridWeek'
+                },
+                events: {{ data|raw }},
+                editable: true,
+                eventResizableFromStart: true,
+                eventDrop: function (info) {
+                    let url = `/api/${info.event.id}/edit`;
+                    let donnees = {
+                        "title": info.event.title,
+                        "description": info.event.extendedProps.description,
+                        "start": info.event.start.toISOString(),
+                        "end": info.event.end ? info.event.end.toISOString() : null,
+                        "backgroundColor": info.event.backgroundColor,
+                        "borderColor": info.event.borderColor,
+                        "textColor": info.event.textColor,
+                        "allDay": info.event.allDay
+                    };
+
+                    let xhr = new XMLHttpRequest();
+
+                    xhr.open("PUT", url);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify(donnees));
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+    
+    {# Bouton "Back" pour revenir au tableau de bord du propriétaire #}
+    <a href="{{ path('app_owner_dashboard') }}" class="btn btn-secondary">Back to Owner Dashboard</a>
+{% endblock %}

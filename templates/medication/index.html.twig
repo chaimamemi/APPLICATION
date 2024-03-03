@@ -1,45 +1,51 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}BiologicalData index{% endblock %}
+{% block title %}
+    <h2 class="fw-bold">Medication List</h2>
+{% endblock %}
 
 {% block body %}
-    <h1>BiologicalData index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Timestamp</th>
-                <th>MeasurementType</th>
-                <th>Value</th>
-                <th>PatientName</th>
-                <th>PatientLastName</th>
-                <th>PatientAge</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for biological_datum in biological_datas %}
-            <tr>
-                <td>{{ biological_datum.id }}</td>
-                <td>{{ biological_datum.timestamp ? biological_datum.timestamp|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ biological_datum.measurementType }}</td>
-                <td>{{ biological_datum.value }}</td>
-                <td>{{ biological_datum.patientName }}</td>
-                <td>{{ biological_datum.PatientLastName }}</td>
-                <td>{{ biological_datum.patientAge }}</td>
-                <td>
-                    <a href="{{ path('app_medication_show', {'id': biological_datum.id}) }}">show</a>
-                    <a href="{{ path('app_medication_edit', {'id': biological_datum.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_medication_new') }}">Create new</a>
+    <section class="intro">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative;">
+                                <table class="table table-striped mb-0 text-center" style="font-size: 18px;">
+                                    <thead style="background-color: #1E90FF; color: white;">
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Medication Name</th>
+                                            <th scope="col">Medical Note</th>
+                                            <th scope="col">Dosage</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for medication in medications %}
+                                        <tr>
+                                            <td>{{ medication.id }}</td>
+                                            <td>{{ medication.description }}</td>
+                                            <td>{{ medication.nameMedication }}</td>
+                                            <td>{{ medication.medicalNote }}</td>
+                                            <td>{{ medication.dosage }}</td>
+                                            <td>
+                                                <a href="{{ path('app_medication_show', {'id': medication.id}) }}" class="btn btn-primary">Show</a>
+                                                <a href="{{ path('app_medication_edit', {'id': medication.id}) }}" class="btn btn-warning">Edit</a>
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="6">No records found</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

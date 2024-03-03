@@ -1,0 +1,15 @@
+
+
+{% block title %}Edit Appointment{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h2>Edit Appointment</h2>
+        <form method="post" action="{{ path('edit_appointment', {'id': appointment.id}) }}">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit">Save Changes</button>
+            {{ form_end(form) }}
+        </form>
+    </div>
+{% endblock %}

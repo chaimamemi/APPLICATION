@@ -16,12 +16,24 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use App\Entity\Appointment;
 use App\Form\AppointmentType;
+use App\Repository\UserRepository; 
+use Symfony\Component\Notifier\Notification\Notification;
+use Symfony\Component\Notifier\Recipient\Recipient;
+use Symfony\Component\Notifier\NotifierInterface;
+use App\Repository\AppointmentRepository;
+use App\Entity\Calendar;
+use App\Form\CalendarType;
+use App\Entity\BiologicalData;
 
+use App\Repository\CalendarRepository;
+
+
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class OwnerController extends AbstractController
 {
     #[Route('/owner', name: 'app_owner_dashboard')]
-    public function index(Request $request, Security $security): Response
+    public function index(Request $request, Security $security, AppointmentRepository $appointmentRepository): Response
     {
         // Récupérer l'utilisateur connecté
         /** @var User $user */
@@ -41,13 +53,19 @@ class OwnerController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $braceletRepository = $entityManager->getRepository(Bracelet::class);
         $braceletData = $braceletRepository->findAll(); // Ou utilisez une méthode spécifique pour récupérer les données
+   
+        // Récupérer les rendez-vous de l'utilisateur
+        $appointments = $appointmentRepository->findBy(['patient' => $user]);
 
-        // Génération du code d'accès
-        $code = $request->getSession()->get('access_code');
-        if (!$code) {
-            $code = $this->generateNewCode();
-            $request->getSession()->set('access_code', $code);
-        }
+        // Génération du code aléatoire
+        $code = uniqid();
+
+      
+    // Récupérer le code généré par le propriétaire depuis la requête
+    $ownerCode = $request->query->get('code');
+
+  
+       
 
         return $this->render('owner/app_owner_dashboard.html.twig', [
             'braceletData' => $braceletData,
@@ -55,72 +73,171 @@ class OwnerController extends AbstractController
             'firstName' => $firstName,
             'lastName' => $lastName,
             'email' => $email,
+            'appointments' => $appointments,
         ]);
     }
 
-    private function generateNewCode(): string
-    {
-        return uniqid();
-    }
 
-    #[Route('/generate-code', name: 'app_generate_code')]
-    public function generateCode(Request $request): JsonResponse
+    #[Route('/owner/calendar', name: 'app_owner_calendar')]
+    public function calendar(CalendarRepository $calendarRepository): Response
     {
-        $newCode = $this->generateNewCode();
-        $request->getSession()->set('access_code', $newCode);
-
-        return $this->json($newCode);
-    }
-
-    #[Route('/send-code', name: 'app_send_code')]
-    public function sendCode(Request $request, MailerInterface $mailer): Response
-    {
-        // Récupérer l'adresse e-mail saisie par l'utilisateur depuis la requête
-        $emailRecipient = $request->request->get('emailRecipient');
+        $calendars = $calendarRepository->findAll();
+        $rdvs = [];
     
-        // Vérifier si l'adresse e-mail est vide ou non valide
-        if (empty($emailRecipient) || !filter_var($emailRecipient, FILTER_VALIDATE_EMAIL)) {
-            $this->addFlash('error', 'Invalid email address.');
-            return $this->redirectToRoute('app_owner_dashboard');
+        foreach ($calendars as $calendar) {
+            $rdvs[] = [
+                'id' => $calendar->getId(),
+                'start' => $calendar->getStart()->format('Y-m-d H:i:s'),
+                'end' => $calendar->getEnd()->format('Y-m-d H:i:s'),
+                'title' => $calendar->getTitle(),
+                'description' => $calendar->getDescription(),
+                'backgroundColor' => $calendar->getBackgroundColor(),
+                'borderColor' => $calendar->getBorderColor(),
+                'textColor' => $calendar->getTextColor(),
+                'allDay' => $calendar->getAllDay(),
+            ];
         }
     
-        // Générer le code d'accès
-        $code = $this->generateNewCode();
+        $data = json_encode($rdvs);
     
-        // Envoyer le code par e-mail
-        $email = (new Email())
-            ->from('chaima.mami@esprit.tn') // Utilisez votre adresse e-mail ici
-            ->to($emailRecipient)
-            ->subject('Your access code')
-            ->text('Your access code: ' . $code);
-    
-        $mailer->send($email);
-    
-        $this->addFlash('success', 'Email sent successfully.');
-    
-        return $this->redirectToRoute('app_owner_dashboard');
+        return $this->render('owner/owner_calendar.html.twig', [
+            'data' => $data,
+        ]);
     }
 
-    public function createAppointment(Request $request): Response
+
+
+
+    #[Route('/create-appointment', name: 'create_appointment')]
+    public function createAppointment(Request $request, UserRepository $userRepository): Response
     {
+        $user = $this->getUser();
+
+        if (!$user || !in_array('ROLE_OWNER', $user->getRoles(), true)) {
+            throw $this->createAccessDeniedException('You are not authorized to access this page.');
+        }
+
         $appointment = new Appointment();
-        $form = $this->createForm(AppointmentType::class, $appointment);
+
+        $doctors = $userRepository->findByRole('ROLE_DOCTOR');
+
+        $form = $this->createForm(AppointmentType::class, $appointment, [
+            'doctors' => $doctors,
+        ]);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // Initialisez le statut à "pending"
-            $appointment->setStatus('pending');
-    
+            // Vérifier si le champ "Patient" est présent dans la requête
+            if ($form->has('patient')) {
+                // Si le champ "Patient" est présent, définissez l'utilisateur connecté comme le patient du rendez-vous
+                $appointment->setPatient($user);
+            }
+
+            // Persistez normalement
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($appointment);
             $entityManager->flush();
-    
-            // Rediriger ou notifier l'utilisateur Owner
+
+            return $this->redirectToRoute('app_owner_dashboard');
         }
-    
+
         return $this->render('owner/create_appointment.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+
+
+    #[Route('/edit-appointment/{id}', name: 'edit_appointment')]
+    public function editAppointment(Request $request, Appointment $appointment, UserRepository $userRepository): Response
+    {
+        // Vérifier si l'utilisateur est le propriétaire de l'appointment
+        if ($appointment->getPatient() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You are not authorized to edit this appointment.');
+        }
+    
+        $doctors = $userRepository->findByRole('ROLE_DOCTOR');
+    
+        $form = $this->createForm(AppointmentType::class, $appointment, [
+            'doctors' => $doctors,
+        ]);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Persistez normalement
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+    
+            return $this->redirectToRoute('app_owner_dashboard');
+        }
+    
+        return $this->render('owner/edit_appointment.html.twig', [
+            'form' => $form->createView(),
+            'appointment' => $appointment, // Assurez-vous que cette ligne passe l'objet $appointment au modèle
+        ]);
+    }
+
+    #[Route('/delete-appointment/{id}', name: 'delete_appointment')]
+    public function deleteAppointment(Request $request, Appointment $appointment): Response
+    {
+        // Vérifier si l'utilisateur est le propriétaire de l'appointment
+        if ($appointment->getPatient() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You are not authorized to delete this appointment.');
+        }
+
+        // Supprimer l'appointment
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($appointment);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Appointment deleted successfully.');
+
+        return $this->redirectToRoute('app_owner_dashboard');
+    }
+ 
+
+ 
+ #[Route('/check-appointments', name: 'check_appointments')]
+    public function checkAppointments(AppointmentRepository $appointmentRepository, SessionInterface $session): Response
+    {
+        $appointments = $appointmentRepository->findAll();
+    
+        foreach ($appointments as $appointment) {
+            $doctorFullName = $appointment->getDoctor()->getFirstName() . ' ' . $appointment->getDoctor()->getLastName();
+            if ($appointment->getStatus() === 'accepted') {
+                $this->addFlash('success', "Your appointment with doctor $doctorFullName is accepted :ID: {$appointment->getId()}");
+            } elseif ($appointment->getStatus() === 'rejected') {
+                $this->addFlash('error', "Your appointment with doctor $doctorFullName is rejected. Try another date. ID: {$appointment->getId()}");
+            }
+        }
+    
+        return $this->redirectToRoute('app_owner_dashboard');
+    }
+
+    
+    #[Route('/delete-notification/{id}', name: 'delete_notification')]
+public function deleteNotification(Appointment $appointment): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->remove($appointment);
+    $entityManager->flush();
+
+    $this->addFlash('success', 'Notification deleted successfully.');
+
+    return $this->redirectToRoute('app_owner_dashboard');
+}
+
+
+
+public function uploadOwnerImage(Request $request): Response
+{
+    // Récupérer le chemin temporaire de l'image téléchargée
+    $imageFile = $request->files->get('owner_image');
+    $imagePath = $imageFile->getRealPath();
+
+    return $this->render('owner/app_owner_dashboard.html.twig', [
+        'imagePath' => $imagePath,
+    ]);
+}
+
 
 }

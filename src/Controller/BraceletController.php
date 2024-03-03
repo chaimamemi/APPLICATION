@@ -18,17 +18,17 @@ class BraceletController extends AbstractController
         // Récupérer tous les bracelets depuis la base de données
         $entityManager = $this->getDoctrine()->getManager();
         $bracelets = $entityManager->getRepository(Bracelet::class)->findAll();
-
+    
         // Création d'un tableau associatif pour stocker les formulaires de chaque bracelet
         $braceletForms = [];
         foreach ($bracelets as $bracelet) {
             // Création du formulaire et liaison avec l'objet Bracelet
             $form = $this->createForm(BraceletType::class, $bracelet);
-
+    
             // Stocker le formulaire dans le tableau associatif avec l'ID du bracelet comme clé
             $braceletForms[$bracelet->getId()] = $form->createView();
         }
-
+    
         // Vérifier si le bouton "Show Information" a été cliqué
         if ($request->request->has('showInformation')) {
             // Récupérer l'ID du bracelet sélectionné dans le formulaire
@@ -36,19 +36,11 @@ class BraceletController extends AbstractController
             // Rediriger vers la page d'informations du bracelet avec l'ID sélectionné
             return $this->redirectToRoute('bracelet_information', ['id' => $selectedBraceletId]);
         }
-
-        // Affichage des formulaires dans le template
-        return $this->render('bracelet/index.html.twig', [
-            'braceletForms' => $braceletForms,
-        ]);
-    }
-
-    #[Route('/bracelet/{id}', name: 'bracelet_information')]
-    public function showBraceletInformation(Bracelet $bracelet): Response
-    {
-        // Affichage des détails du bracelet dans le template "Bracelet Information"
+    
+        // Affichage des bracelets dans le template
         return $this->render('bracelet/information.html.twig', [
-            'bracelet' => $bracelet,
+            'bracelets' => $bracelets, // Passer la variable "bracelets" au template Twig
         ]);
     }
+
 }

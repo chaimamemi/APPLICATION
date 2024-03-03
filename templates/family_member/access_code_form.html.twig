@@ -1,0 +1,16 @@
+{% block title %}Enter Access Code{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Enter Owner's Access Code</h1>
+    <form method="post" action="{{ path('app_family_member_dashboard') }}">
+        <label for="access_code">Access Code:</label>
+        <input type="text" id="access_code" name="access_code" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if accessCodeFromSession is defined %}
+        <p>Access Code from Session: {{ accessCodeFromSession }}</p>
+    {% endif %}
+</div>
+{% endblock %}

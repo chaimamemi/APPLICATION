@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Markers</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      // Initialize and add the map
+      function initMap() {
+        // The location of Uluru
+        const uluru = { lat: 36.8955629, lng: 10.1367166 };
+        const Ariana = { lat: 36.9685735, lng: 10.1219855 };
+        const Benzart = { lat: 37.2720905, lng: 9.8708565 };
+        // The map, centered at Uluru
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 6,
+          center: uluru,
+        });
+        
+
+        // The marker, positioned at Uluru
+            var marker = new google.maps.Marker({
+                position: uluru,
+                map: map,
+        });
+
+        var marker = new google.maps.Marker({
+                position: Benzart,
+                map: map,
+        });
+
+
+
+        var marker = new google.maps.Marker({
+                position: Ariana,
+                map: map,
+                title: 'Gouvernorat Ariana, Tunisie',
+        });
+      }
+    </script>
+ <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdcEBxMks3XyfOyHSC6XzHmp_-Peo-Kog&callback=initMap"></script>
+
+  </body>
+</html>

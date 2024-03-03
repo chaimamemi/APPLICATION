@@ -1,19 +1,60 @@
-{% extends 'base.html.twig' %}
+{# templates/health_professional/doctor_dashboard.html.twig #}
+
+
 
 {% block title %}Doctor Dashboard{% endblock %}
 
+<div class="container center-content">
+    <h2>Welcome  {{ app.user.firstName }} {{ app.user.lastName }}</h2>
+    <p class="lead">Here you can manage your appointments and perform other owner-specific actions.</p>
+
+    <!-- Informations utilisateur -->
+    <div id="userInfo" class="hidden">
+        <h3 class="mt-5">Profile</h3>
+        <p id="displayFirstName">First Name: {{ app.user.firstName }}</p>
+        <p id="displayLastName">Last Name: {{ app.user.lastName }}</p>
+        <p id="displayEmail">Email: {{ app.user.email }}</p>
+        
+    </div>
 {% block body %}
-    <h1>Doctor Dashboard</h1>
 
-    <!-- Include the index view -->
-    {% include 'biological_data/index.html.twig' %}
-
-    <!-- Include the new view -->
-    {% include 'biological_data/new.html.twig' %}
-
-    <!-- Include the edit view -->
-    {% include 'biological_data/edit.html.twig' %}
-
-    <!-- Include the show view -->
-    {% include 'biological_data/show.html.twig' %}
+    <div class="container">
+        <h1 class="my-4">Doctor Dashboard</h1>
+        <div class="row">
+            <div class="col-md-8">
+                <h3>Appointment Requests</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Date & Time</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                            <tr>
+                                <td>{{ appointment.patient.firstName }}</td>
+                                <td>{{ appointment.patient.lastName }}</td>
+                                <td>{{ appointment.patient.email }}</td>
+                                <td>{{ appointment.dateTime|date('Y-m-d H:i:s') }}</td>
+                                <td>{{ appointment.description }}</td>
+                                <td>
+                                    <form method="post" action="{{ path('confirm_appointment', {'id': appointment.id}) }}">
+                                        <button type="submit" class="btn btn-success">Accept</button>
+                                    </form>
+                                    <form method="post" action="{{ path('reject_appointment', {'id': appointment.id}) }}">
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}

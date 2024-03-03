@@ -43,11 +43,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: BiologicalData::class)]
     private Collection $biologicalData;
 
+    #[ORM\Column(length: 255)]
+    private ?string $phoneNumber = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $speciality = null;
+
+   
+  
+
     public function __construct()
-    {
-        $this->appointments = new ArrayCollection();
-        $this->biologicalData = new ArrayCollection();
-    }
+{
+    $this->appointments = new ArrayCollection();
+    $this->biologicalData = new ArrayCollection();
+}
 
     public function getId(): ?int
     {
@@ -142,22 +151,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->appointments->contains($appointment)) {
             $this->appointments->add($appointment);
-            $appointment->setPatientUserId($this);
+          
         }
 
         return $this;
     }
 
-    public function removeAppointment(Appointment $appointment): static
-    {
-        if ($this->appointments->removeElement($appointment)) {
-            if ($appointment->getPatientUserId() === $this) {
-                $appointment->setPatientUserId(null);
-            }
-        }
-
-        return $this;
-    }
+  
 
     public function getUsername()
     {
@@ -205,4 +205,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(string $phoneNumber): static
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getSpeciality(): ?string
+    {
+        return $this->speciality;
+    }
+
+    public function setSpeciality(string $speciality): static
+    {
+        $this->speciality = $speciality;
+
+        return $this;
+    }
+
+
+    
+
 }

@@ -1,46 +1,38 @@
-{% extends 'base.html.twig' %}
 
-{% block title %}BiologicalData{% endblock %}
+
+{% block title %}Medication{% endblock %}
 
 {% block body %}
-    <h1>BiologicalData</h1>
+    <h1>Medication</h1>
 
     <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ biological_datum.id }}</td>
+                <td>{{ medication.id }}</td>
             </tr>
             <tr>
-                <th>Timestamp</th>
-                <td>{{ biological_datum.timestamp ? biological_datum.timestamp|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Description</th>
+                <td>{{ medication.description }}</td>
             </tr>
             <tr>
-                <th>MeasurementType</th>
-                <td>{{ biological_datum.measurementType }}</td>
+                <th>NameMedication</th>
+                <td>{{ medication.nameMedication }}</td>
             </tr>
             <tr>
-                <th>Value</th>
-                <td>{{ biological_datum.value }}</td>
+                <th>MedicalNote</th>
+                <td>{{ medication.medicalNote }}</td>
             </tr>
             <tr>
-                <th>PatientName</th>
-                <td>{{ biological_datum.patientName }}</td>
-            </tr>
-            <tr>
-                <th>PatientLastName</th>
-                <td>{{ biological_datum.PatientLastName }}</td>
-            </tr>
-            <tr>
-                <th>PatientAge</th>
-                <td>{{ biological_datum.patientAge }}</td>
+                <th>Dosage</th>
+                <td>{{ medication.dosage }}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_medication_index') }}">back to list</a>
 
-    <a href="{{ path('app_medication_edit', {'id': biological_datum.id}) }}">edit</a>
+    <a href="{{ path('app_medication_edit', {'id': medication.id}) }}">edit</a>
 
     {{ include('medication/_delete_form.html.twig') }}
 {% endblock %}

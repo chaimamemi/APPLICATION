@@ -1,45 +1,60 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Bracelet Information{% endblock %}
-
 {% block body %}
 <div class="container">
     <h1>Bracelet Information</h1>
 
-    <div class="form-group">
-        <label>Temperature:</label>
-        <span>{{ bracelet.temperature }}</span>
-    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Temperature</th>
+                <th>Blood Pressure</th>
+                <th>Heart Rate</th>
+                <th>Movement</th>
+                <th style="width: 500px;">GPS</th> {# Ajuster la largeur de la colonne GPS #}
+            </tr>
+        </thead>
+        <tbody>
+            {% for bracelet in bracelets %}
+            <tr>
+                <td>{{ bracelet.id }}</td>
+                <td>{{ bracelet.temperature }}</td>
+                <td>{{ bracelet.bloodPressure }}</td>
+                <td>{{ bracelet.heartRate }}</td>
+                <td>{{ bracelet.movement }}</td>
+                <td>
+                    <div id="map{{ bracelet.id }}" style="height: 200px;"></div> <!-- Div pour afficher la carte -->
+                </td>
+            </tr>
+            <script>
+                // Initialize and add the map for each bracelet
+                function initMap{{ bracelet.id }}() {
+                    const latitude = {{ bracelet.latitude }}; // Récupérer la latitude du bracelet
+                    const longitude = {{ bracelet.longitude }}; // Récupérer la longitude du bracelet
+                    
+                    // Créer un objet de position avec les coordonnées du bracelet
+                    const braceletLocation = { lat: latitude, lng: longitude };
 
-    <div class="form-group">
-        <label>Blood Pressure:</label>
-        <span>{{ bracelet.bloodPressure }}</span>
-    </div>
+                    // Créer la carte centrée sur la position du bracelet
+                    const map = new google.maps.Map(document.getElementById("map{{ bracelet.id }}"), {
+                    zoom: 10, // Ajuster le niveau de zoom selon vos préférences
+                    center: braceletLocation, // Centrer la carte sur la position du bracelet
+                    });
 
-    <div class="form-group">
-        <label>Heart Rate:</label>
-        <span>{{ bracelet.heartRate }}</span>
-    </div>
-
-    <div class="form-group">
-        <label>Movement:</label>
-        <span>{{ bracelet.movement }}</span>
-    </div>
-
-    <div class="form-group">
-        <label>GPS:</label>
-        <span>{{ bracelet.gps }}</span>
-    </div>
-
-    <div class="form-group">
-        <label>Latitude:</label>
-        <span>{{ bracelet.latitude }}</span>
-    </div>
-
-    <div class="form-group">
-        <label>Longitude:</label>
-        <span>{{ bracelet.longitude }}</span>
-    </div>
+                    // Créer un marqueur pour la position du bracelet
+                    var marker = new google.maps.Marker({
+                    position: braceletLocation,
+                    map: map,
+                    });
+                }
+                // Appeler la fonction d'initialisation de la carte pour ce bracelet
+                initMap{{ bracelet.id }}();
+            </script>
+            <!-- Inclure le script Google Maps avec la clé API -->
+            <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdcEBxMks3XyfOyHSC6XzHmp_-Peo-Kog&callback=initMap{{ bracelet.id }}"></script>
+            <!-- Remplacer "YOUR_API_KEY" par votre propre clé API Google Maps -->
+            {% endfor %}
+        </tbody>
+    </table>
 
     <a href="{{ path('app_owner_dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
 </div>

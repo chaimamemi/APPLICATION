@@ -1,23 +1,15 @@
-
-
-{% block title %}New BiologicalData{% endblock %}
+{# templates/biological_data/new.html.twig #}
 
 {% block body %}
     <h1>Create new BiologicalData</h1>
 
     {{ form_start(form) }}
-    {{ form_row(form.timestamp) }}
-    {{ form_row(form.measurementType) }}
-    {{ form_row(form.value) }}
-    {{ form_row(form.patientName) }}
-    {{ form_row(form.patientLastName) }}
-    {{ form_row(form.patientAge) }}
+    {{ form_row(form.bracelet) }}
 
-   
-
-    {{ form_row(form.medication) }}
-    {{ form_row(form.disease) }}
-    {{ form_row(form.otherInformation) }}
+    {# Vérifier si un bracelet est associé #}
+    {% if form.bracelet.vars.value == true %}
+        <a href="{{ path('information') }}">Link to information</a>
+    {% endif %}
 
     <button type="submit">Create</button>
     {{ form_end(form) }}

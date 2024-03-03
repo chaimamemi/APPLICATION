@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\AppointmentRepository;
@@ -14,10 +13,12 @@ class Appointment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'appointments')]
-    private ?User $patientUserId = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id")]
+    private $patient;
 
-    
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private ?User $doctor;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateTime = null;
@@ -26,26 +27,26 @@ class Appointment
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    private ?string $status = 'Pending'; // Default value
+
+
+    
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPatientUserId(): ?User
+    public function getPatient(): ?User
     {
-        return $this->patientUserId;
+        return $this->patient;
     }
-
-    public function setPatientUserId(?User $patientUserId): static
+    
+    public function setPatient(?User $patient): static
     {
-        $this->patientUserId = $patientUserId;
-
+        $this->patient = $patient;
         return $this;
     }
-
-   
 
     public function getDateTime(): ?\DateTimeInterface
     {
@@ -55,7 +56,6 @@ class Appointment
     public function setDateTime(\DateTimeInterface $dateTime): static
     {
         $this->dateTime = $dateTime;
-
         return $this;
     }
 
@@ -67,7 +67,6 @@ class Appointment
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -79,7 +78,17 @@ class Appointment
     public function setStatus(string $status): static
     {
         $this->status = $status;
+        return $this;
+    }
 
+    public function getDoctor(): ?User
+    {
+        return $this->doctor;
+    }
+
+    public function setDoctor(?User $doctor): static
+    {
+        $this->doctor = $doctor;
         return $this;
     }
 }

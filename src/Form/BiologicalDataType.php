@@ -13,17 +13,17 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use App\Entity\Bracelet;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class BiologicalDataType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
 {
     $builder
-        ->add('timestamp', null, [
-            'attr' => [
-                'placeholder' => 'e.g. Timestamp',
-            ],
-        ])
+
+   ->add('timestamp', DateTimeType::class, [
+        'date_widget' => 'single_text'
+    ])
         ->add('measurementType', null, [
             'attr' => [
                 'placeholder' => 'e.g. Measurement Type',
@@ -67,12 +67,7 @@ class BiologicalDataType extends AbstractType
                 new Assert\PositiveOrZero(),
             ],
         ])
-        ->add('medication', CollectionType::class, [
-            'entry_type' => MedicationType::class,
-            'allow_add' => true,
-            'allow_delete' => true,
-            'by_reference' => false,
-        ])
+       
         ->add('disease', TextareaType::class, [
             'label' => 'Disease',
             'required' => false,
@@ -87,6 +82,8 @@ class BiologicalDataType extends AbstractType
             'required' => false, // Facultatif selon votre logique métier
             // Autres options si nécessaire...
         ])
+
+
         ->add('otherInformation', TextareaType::class, [
             'label' => 'Other Information',
             'required' => false,
@@ -94,6 +91,8 @@ class BiologicalDataType extends AbstractType
                 'placeholder' => 'e.g. Additional information',
             ],
         ])
+
+
         ->add('hospital');
     }
     
