@@ -79,8 +79,9 @@ class OwnerController extends AbstractController
 
 
     #[Route('/owner/calendar', name: 'app_owner_calendar')]
-    public function calendar(CalendarRepository $calendarRepository): Response
+    public function ownerCalendar(CalendarRepository $calendarRepository): Response
     {
+        // Logique pour récupérer les calendriers des propriétaires
         $calendars = $calendarRepository->findAll();
         $rdvs = [];
     
@@ -104,6 +105,7 @@ class OwnerController extends AbstractController
             'data' => $data,
         ]);
     }
+    
 
 
 

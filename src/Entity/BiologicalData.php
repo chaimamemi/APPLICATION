@@ -17,7 +17,7 @@ class BiologicalData
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'biologicalData')]
-    private ?Bracelet $bracelet;
+    private ?Bracelet $bracelet = null; // Déclaration comme nullable
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $timestamp = null;

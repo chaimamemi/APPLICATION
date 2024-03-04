@@ -21,6 +21,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Validator\Constraints\Callback;
+
 
 class RegistrationFormType extends AbstractType
 {
@@ -30,6 +32,9 @@ class RegistrationFormType extends AbstractType
     {
         $this->entityManager = $entityManager;
     }
+
+
+    
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -114,15 +119,6 @@ class RegistrationFormType extends AbstractType
                 'invalid_message' => null, 
             ])
 
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'invalid_message' => null, 
-                'constraints' => [
-                    new Assert\IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
 
             ->add('phoneNumber', TextType::class, [
                 'label' => 'Phone Number',
@@ -133,10 +129,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'placeholder' => 'e.g. 2150623658',
+                    'placeholder' => 'e.g. 23654841',
                 ],
             ])
-            
+
             ->add('role', ChoiceType::class, [
                 'choices' => [
                     'Select your role' => '',
@@ -155,7 +151,29 @@ class RegistrationFormType extends AbstractType
                 ],
                 'required' => True,
                 'invalid_message' => null, 
+            ])
+            ->add('speciality', TextType::class, [
+                'label' => 'Speciality',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'e.g. Cardiology',
+                ],
+            ])
+
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'invalid_message' => null, 
+                'constraints' => [
+                    new Assert\IsTrue([
+                        'message' => 'You should agree to our terms.',
+                    ]),
+                ],
             ]);
+           
+            
+       
+   
+         
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $form = $event->getForm();
@@ -195,18 +213,20 @@ class RegistrationFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'bracelet_required' => false,
+            'specialities' => [], // Définition par défaut des spécialités
         ]);
     }
 
-    // Validation personnalisée pour vérifier si l'email est unique
-    public function validateUniqueEmail($value, ExecutionContextInterface $context): void
-    {
-        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $value]);
-
-        if ($existingUser !== null) {
-            $context->buildViolation('This email is already associated with an existing account.')
-                ->atPath('email')
-                ->addViolation();
+        // Validation personnalisée pour vérifier si l'email est unique
+        public function validateUniqueEmail($value, ExecutionContextInterface $context): void
+        {
+            $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $value]);
+    
+            if ($existingUser !== null) {
+                $context->buildViolation('This email is already associated with an existing account.')
+                    ->atPath('email')
+                    ->addViolation();
+            }
         }
     }
-}
+    

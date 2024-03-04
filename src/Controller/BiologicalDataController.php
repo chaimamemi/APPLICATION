@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UserRepository;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 #[Route('/biologicaldata')]
 class BiologicalDataController extends AbstractController
@@ -98,4 +100,37 @@ class BiologicalDataController extends AbstractController
 
         return $this->redirectToRoute('app_biological_data_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+    #[Route('/download/{id}', name: 'app_biological_data_download_pdf', methods: ['GET'])]
+    public function downloadPdf(BiologicalData $biologicalDatum): Response
+{
+    // Configure Dompdf according to your needs
+    $pdfOptions = new Options();
+    $pdfOptions->set('defaultFont', 'Arial');
+    
+    // Instantiate Dompdf with our options
+    $dompdf = new Dompdf($pdfOptions);
+    
+    // Retrieve the HTML generated in our twig file
+    $html = $this->renderView('biological_data/show_pdf.html.twig', [
+        'biological_datum' => $biologicalDatum,
+    ]);
+    
+    // Load HTML to Dompdf
+    $dompdf->loadHtml($html);
+    
+    // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+    $dompdf->setPaper('A4', 'portrait');
+
+    // Render the HTML as PDF
+    $dompdf->render();
+
+    // Output the generated PDF to Browser (force download)
+    return new Response($dompdf->output(), 200, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'attachment;filename="biologicaldata.pdf"'
+    ]);
+}
 }

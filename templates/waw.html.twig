@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@0.5.3/dist/css/axentix.min.css">
+        {% block stylesheets %}{% endblock %}
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    </head>
+    <body>
+        <header>
+    <nav class="navbar primary">
+         <a href="{{ path('app_doctor_statistical') }}" class="navbar-brand">LifeLineHope</a>
+        <div class="navbar-menu ml-auto">
+        <a class="navbar-link" href="{{ path('app_patient_with_bracelet') }}">Patients with Bracelet</a>
+        <a class="navbar-link" href="{{ path('app_patient_without_bracelet') }}">Patients without Bracelet</a>
+        <a class="navbar-link" href="{{ path('app_health_professional_doctor_dashboard') }}">Back</a>
+    </div>
+</nav>
+        </header>
+
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+
+        <footer class="footer primary">
+            Copyright © 2024 LifeLineHope
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/axentix@0.5.3/dist/js/axentix.min.js"></script>
+        {% block javascripts %}
+        <script>
+            let drop = new Axentix.Dropdown('#dropdown');
+        </script>
+        {% endblock %}
+        <script src="{{ asset('js/scripts.js') }}"></script>
+    </body>
+</html>

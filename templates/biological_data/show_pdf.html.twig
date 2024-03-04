@@ -1,3 +1,5 @@
+{# show_pdf.html.twig #}
+
 
 
 {% block title %}Biological Data{% endblock %}
@@ -47,23 +49,12 @@
                             <td>{{ biological_datum.otherInformation }}</td>
                         </tr>
                         
-                        {# Display bracelet data if available #}
-                        {% if bracelet is not null %}
-                            <tr>
-                                <th>Bracelet Data</th>
-                                <td>
-                                    <a href="{{ path('app_bracelet', {'id': bracelet.id}) }}" class="btn btn-primary">View Bracelet Information</a>
-                                </td>
-                            </tr>
-                        {% endif %}
+                       
                     </tbody>
                 </table>
 
-                <a href="{{ path('app_biological_data_index') }}" class="btn btn-primary">Back to list</a>
-                <a href="{{ path('app_biological_data_download_pdf', {'id': biological_datum.id}) }}" class="btn btn-primary">Download</a>
-                <a href="{{ path('app_biological_data_edit', {'id': biological_datum.id}) }}" class="btn btn-primary">Edit</a>
-                {{ include('biological_data/_delete_form.html.twig') }}
-            </div>            
+                
+            </div>
         </div>
     </div>
 {% endblock %}

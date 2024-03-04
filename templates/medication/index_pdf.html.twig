@@ -1,3 +1,7 @@
+{% block title %}
+    <h2 class="fw-bold">Medication List</h2>
+{% endblock %}
+
 {% block body %}
     <section class="intro">
         <div class="container">
@@ -15,39 +19,38 @@
                                             <th scope="col">Medical Note</th>
                                             <th scope="col">Dosage</th>
                                             <th scope="col">Patient Name</th>
-                                            <th scope="col">Patient Last Name</th>
+                                            <th scope="col">Patient last name</th>
                                             <th scope="col">Disease</th>
                                             <th scope="col">Other Information</th>
-                                            <th scope="col">Actions</th>
+                                           
+
+
+                                    
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      {% for medication in medications %}
-    <tr>
-        <td>{{ medication.id }}</td>
-        <td>{{ medication.description }}</td>
-        <td>{{ medication.nameMedication }}</td>
-        <td>{{ medication.medicalNote }}</td>
-        <td>{{ medication.dosage }}</td>
-        {% if medication.biologicalData %}
+                                        {% if medications is not empty %}
+                                            {% for medication in medications %}
+                                                <tr>
+                                                    <td>{{ medication.id }}</td>
+                                                    <td>{{ medication.description }}</td>
+                                                    <td>{{ medication.nameMedication }}</td>
+                                                    <td>{{ medication.medicalNote }}</td>
+                                                    <td>{{ medication.dosage }}</td>
+                                                     {% if medication.biologicalData %}
             <td>{{ medication.biologicalData.patientName }}</td>
             <td>{{ medication.biologicalData.patientLastName }}</td>
             <td>{{ medication.biologicalData.disease }}</td>
             <td>{{ medication.biologicalData.otherInformation }}</td>
-        {% else %}
-            <td colspan="4">No Biological Data</td>
-        {% endif %}
-        <td>
-            <a href="{{ path('app_medication_show', {'id': medication.id}) }}" class="btn btn-primary">Show</a>
-            <a href="{{ path('app_medication_edit', {'id': medication.id}) }}" class="btn btn-warning">Edit</a>
-            <a href="{{ path('app_medication_download_pdf', {'id': medication.id}) }}" class="btn btn-secondary">Download PDF</a>
-        </td>
-    </tr>
-{% else %}
-    <tr>
-        <td colspan="10">No records found</td>
-    </tr>
-{% endfor %}
+            {% endif %}
+                                                    
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="7">No records found</td> <!-- colspan="7" car il y a 7 colonnes dans le tableau -->
+                                            </tr>
+                                        {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -57,8 +60,4 @@
             </div>
         </div>
     </section>
-     <!-- Bouton Back to your dashboard -->
-    <div class="container mt-3">
-        <a href="{{ path('app_health_professional_doctor_dashboard') }}" class="btn btn-secondary">Back to your dashboard</a>
-    </div>
 {% endblock %}
