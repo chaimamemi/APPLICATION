@@ -1,6 +1,6 @@
+<!DOCTYPE html>
 
-
-{% block title %}Appointment{% endblock %}
+<title>Appointment</title>
 
 {% block body %}
     <h1>Appointment</h1>
@@ -12,12 +12,14 @@
                 <td>{{ appointment.id }}</td>
             </tr>
             <tr>
-                <th>DateTime</th>
-                <td>{{ appointment.dateTime ? appointment.dateTime|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Date</th>
+                <td>{{ appointment.Date ? appointment.Date|date('Y-m-d') : '' }}</td>
+
+
             </tr>
             <tr>
-                <th>Description</th>
-                <td>{{ appointment.description }}</td>
+                <th>HourOfAppointment</th>
+                <td>{{ appointment.HourOfAppointment ? appointment.HourOfAppointment|date('H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>

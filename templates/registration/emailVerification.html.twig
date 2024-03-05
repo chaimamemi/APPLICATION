@@ -1,0 +1,66 @@
+{# templates/email_verification.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Email Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto;
+            width: 150px;
+            height: auto;
+        }
+
+        .title {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .message {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{{asset('Back-office/img/logo.png')}}" alt="Logo" class="logo">
+        <h1 class="title">Email Has Been Verified</h1>
+        <p class="message">Congratulations! Your email has been successfully verified.</p>
+        <a href="{{path('app_login')}}" class="button">Continue</a>
+    </div>
+</body>
+</html>

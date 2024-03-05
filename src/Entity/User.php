@@ -3,14 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -19,44 +19,140 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 180)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 180)]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
+    private array $roles = [];
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $reset_token = null;
+
+    #[ORM\Column]
+    #[Assert\NotBlank]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $role = 'ROLE_USER'; // Set default role to ROLE_USER
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
 
-    #[ORM\ManyToOne(inversedBy: 'userId')]
-    private ?Bracelet $bracelet = null;
+    #[ORM\Column]
+    #[Assert\NotBlank]
+    private ?string $city = null;
 
-    #[ORM\OneToMany(mappedBy: 'patientUserId', targetEntity: Appointment::class)]
-    private Collection $appointments;
+    #[ORM\Column]
+    #[Assert\NotBlank]
+    private ?string $gender = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: BiologicalData::class)]
-    private Collection $biologicalData;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Regex(pattern: "/^\d{8}$/", message: "Phone number must be exactly 8 digits.")]
     private ?string $phoneNumber = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $speciality = null;
+    #[ORM\Column(type: 'datetime')]
+    #[Assert\NotBlank]
+    #[Assert\Type("\DateTimeInterface")]
+    private ?\DateTimeInterface $birthdate = null;
 
-   
-  
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $specialty = null;
 
-    public function __construct()
-{
-    $this->appointments = new ArrayCollection();
-    $this->biologicalData = new ArrayCollection();
-}
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $bloodType = null;
+
+    #[ORM\Column(type: "decimal", precision: 5, scale: 2, nullable: true)]
+    #[Assert\Type(type: ["float", "int"], message: "Height must be a numeric value.")]
+    private ?float $height;
+
+    #[ORM\Column(type: "decimal", precision: 5, scale: 2, nullable: true)]
+    #[Assert\Type(type: ["float", "int"], message: "Weight must be a numeric value.")]
+    private ?float $weight;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $hospitalName = null;
+
+    public function getSpecialty(): ?string
+    {
+        return $this->specialty;
+    }
+
+    public function setSpecialty(?string $specialty): self
+    {
+        $this->specialty = $specialty;
+
+        return $this;
+    }
+
+    public function getResetToken()
+    {
+        return $this->reset_token;
+    }
+
+    /**
+     * @param mixed $reset_token
+     */
+    public function setResetToken($reset_token): void
+    {
+        $this->reset_token = $reset_token;
+    }
+
+    public function getBloodType(): ?string
+    {
+        return $this->bloodType;
+    }
+
+    public function setBloodType(?string $bloodType): self
+    {
+        $this->bloodType = $bloodType;
+
+        return $this;
+    }
+
+    public function getHeight(): ?float
+    {
+        return $this->height;
+    }
+
+    public function setHeight(?float $height): self
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(?float $weight): self
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    public function getHospitalName(): ?string
+    {
+        return $this->hospitalName;
+    }
+
+    public function setHospitalName(?string $hospitalName): self
+    {
+        $this->hospitalName = $hospitalName;
+
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -68,24 +164,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): static
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
 
         return $this;
     }
-    
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
-    
+
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): static
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
 
@@ -97,9 +188,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
 
         return $this;
     }
@@ -109,99 +219,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
 
-    public function getRole(): ?string
+    public function getIsVerified(): ?bool
     {
-        return $this->role ? 'ROLE_' . strtoupper($this->role) : null;
+        return $this->isVerified;
     }
 
-    public function setRole(string $role): static
+    public function setIsVerified(?bool $isVerified): self
     {
-        $this->role = $role;
+        $this->isVerified = $isVerified;
 
         return $this;
     }
 
-    public function getBracelet(): ?Bracelet
+    public function getCity(): ?string
     {
-        return $this->bracelet;
+        return $this->city;
     }
 
-    public function setBracelet(?Bracelet $bracelet): static
+    public function setCity(?string $city): self
     {
-        $this->bracelet = $bracelet;
+        $this->city = $city;
 
         return $this;
     }
 
-    
-
-    public function getAppointments(): Collection
+    public function getGender(): ?string
     {
-        return $this->appointments;
+        return $this->gender;
     }
 
-    public function addAppointment(Appointment $appointment): static
+    public function setGender(?string $gender): self
     {
-        if (!$this->appointments->contains($appointment)) {
-            $this->appointments->add($appointment);
-          
-        }
-
-        return $this;
-    }
-
-  
-
-    public function getUsername()
-    {
-        return $this->email;
-    }
-
-    public function getSalt()
-    {
-        return null;
-    }
-
-    public function getRoles()
-    {
-        return [$this->role];
-    }
-
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
-
-    public function getBiologicalData(): Collection
-    {
-        return $this->biologicalData;
-    }
-
-    public function addBiologicalData(BiologicalData $biologicalData): static
-    {
-        if (!$this->biologicalData->contains($biologicalData)) {
-            $this->biologicalData->add($biologicalData);
-            $biologicalData->setPatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBiologicalData(BiologicalData $biologicalData): static
-    {
-        if ($this->biologicalData->removeElement($biologicalData)) {
-            if ($biologicalData->getPatient() === $this) {
-                $biologicalData->setPatient(null);
-            }
-        }
+        $this->gender = $gender;
 
         return $this;
     }
@@ -211,26 +267,55 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(string $phoneNumber): static
+    public function setPhoneNumber(?string $phoneNumber): self
     {
         $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
 
-    public function getSpeciality(): ?string
+    public function getBirthdate(): ?\DateTimeInterface
     {
-        return $this->speciality;
+        return $this->birthdate;
     }
 
-    public function setSpeciality(string $speciality): static
+    public function setBirthdate(?\DateTimeInterface $birthdate): self
     {
-        $this->speciality = $speciality;
+        $this->birthdate = $birthdate;
 
         return $this;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
 
-    
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
 
+    public function getSalt(): ?string
+    {
+        return null;
+   
+
+ }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function __construct(
+        float|int|null $height = null,
+        float|int|null $weight = null,
+    ) {
+        $this->height = $height;
+        $this->weight = $weight;
+    }
 }
+
+

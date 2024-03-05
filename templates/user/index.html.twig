@@ -1,43 +1,211 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-back.html.twig' %}
 
 {% block title %}User index{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+      .custom-width {
+        width: 100%;
+    }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .table th, .table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .table tr:hover {
+            background-color: #ddd;
+        }
+        .actions a {
+            margin-right: 5px;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <h1>User index</h1>
+
+<div class="main" id="main">
+
+
+            <div class="row">
+                <section>
+
+                    <div class="album py-5 bg-light">
+                        <div class="container">
+                            <div class="sidebar-search" >
+                                <div class="input-group custom-search-form">
+                                    <input    type="text" id="search" class="form-control widget_input" placeholder="Chercher..." style="width: 1180px;background: white">
+                                </div>
+                                <br>
+                                <!-- /input-group -->
+                                <ul class="nav" id="side-menu">
+                                    <li>
+                                        <a href="#"> <span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level" id="entitiesNav">
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+
+<div class="row">
+        <div class="col-lg-12 custom-width">
+
+        <div class="card custom-width" >
+            <div class="card-body">
+                <a href="{{ path('app_index') }}"><i class="ri-arrow-left-circle-fill" style="font-size: 50px;"></i></a>
+                <h5 class="card-title">Liste des utilisateurs</h5>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>FirstName</th>
-                <th>LastName</th>
+                <th>Name</th>
                 <th>Email</th>
-                <th>Password</th>
-                <th>Role</th>
-                <th>actions</th>
+                <th>Roles</th>
+                <th>Gender</th>
+                <th>Phone</th>
+                <th>Birthdate</th>
+                <th>Specialty</th>
+                <th>Blood</th>
+                <th>Height</th>
+                <th>Weight</th>
+                <th>Hospital </th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.lastName }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.role }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.firstName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                    
+                                            {{ user.roles|join(', ') }}
+
+                    </td>
+                    <td>{{ user.gender }}</td>
+                    <td>{{ user.phoneNumber }}</td>
+                    <td>{{ user.birthdate ? user.birthdate|date('Y-m-d') : '' }}</td>
+                    <td>{{ user.specialty }}</td>
+                    <td>{{ user.bloodType }}</td>
+                    <td>{{ user.height }}</td>
+                    <td>{{ user.weight }}</td>
+                    <td>{{ user.hospitalName }}</td>
+                    <td class="actions">
+                    
+     
+                                <a     href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</>
+                                
+                                <a     href="{{ path('app_user_delete', {'id': user.id}) }}">Supprimer</>
+
+                   
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="18">No records found</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
     <a href="{{ path('app_user_new') }}">Create new</a>
+
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+    </div>
+
+        <!-- jQuery is necessary -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+
+        jQuery(document).ready(function() {
+            var searchRequest = null;
+            $("#search").keyup(function() {
+
+
+
+                var minlength = 3;
+                var that = this;
+                var value = $(this).val(); // elyyktbo fi input 7atito fi var var
+                var entitySelector = $("#entitiesNav").html('');
+                if (value.length >= minlength ) {
+                    if (searchRequest != null)
+                        searchRequest.abort();
+                    searchRequest = $.ajax({
+                        type: "GET",
+                        url: "{{ path('ajax_search') }}",
+                        data: {
+                            'q' : value
+                        },
+                        dataType: "text",
+                        success: function(msg){
+                            //we need to check if the value is the same
+                            if (value==$(that).val()) {
+                                var result = JSON.parse(msg);
+
+                                $.each(result, function(key, arr) {
+                                    $.each(arr, function(id, value) {
+                                        if (key == 'users') {
+                                            if (id != 'error') {
+                                                x= document.getElementById("containerr");
+
+entitySelector.append('<div class="card shadow" style="width: 100%; padding: 15px;">' + 
+    '<div class="card-body">' +
+    '<span>Email: ' + value[2] + '</span><br/>' +
+    '<a href="/user/' + id + '">' +
+    '<span>FirstName: ' + value[0] + '</span>' +
+    '</a>' +
+    '</div>' +
+    '</div>');
+
+
+                                            } else {
+                                                entitySelector.append('<li class="errorLi">'+value+'</li>');
+                                            }
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            $(".btn1").click(function(){
+                $("h1").slideUp();
+            });
+            $(".btn2").click(function(){
+                $("h1").slideDown();
+            });
+            $(".btn3").click(function(){
+                $("h1").slideToggle();
+            });
+        });
+    </script>
 {% endblock %}

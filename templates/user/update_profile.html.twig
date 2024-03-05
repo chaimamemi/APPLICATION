@@ -1,0 +1,124 @@
+{% extends 'base-front.html.twig' %}
+
+{% block header %}
+    {# Add header content if needed #}
+{% endblock %}
+
+{% block content %}
+    {# Add content block if needed #}
+{% endblock %}
+
+{% block body %}
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="col-md-12 wow fadeIn" data-wow-delay="0.1s">
+            <div class="bg-light rounded p-5">
+                <p class="d-inline-block border rounded-pill py-1 px-4">My account</p>
+                <h1 class="mb-4">Update profile</h1>
+
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name', 'id': 'firstName'}}) }}
+                            <label for="firstName">First Name</label>
+                        </div>
+                        {{ form_errors(form.firstName) }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name', 'id': 'lastName'}}) }}
+                            <label for="lastName">Last Name</label>
+                        </div>
+                        {{ form_errors(form.lastName) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Your Email', 'id': 'email'}}) }}
+                            <label for="email">Your Email</label>
+                        </div>
+                        {{ form_errors(form.email) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.city, {'attr': {'class': 'form-control', 'placeholder': 'City', 'id': 'city'}}) }}
+                            <label for="city">City</label>
+                        </div>
+                        {{ form_errors(form.city) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.gender, {'attr': {'class': 'form-control', 'placeholder': 'Gender', 'id': 'gender'}}) }}
+                            <label for="gender">Gender</label>
+                        </div>
+                        {{ form_errors(form.gender) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number', 'id': 'phoneNumber'}}) }}
+                            <label for="phoneNumber">Phone Number</label>
+                        </div>
+                        {{ form_errors(form.phoneNumber) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.birthdate, {'attr': {'class': 'form-control', 'id': 'birthdate'}}) }}
+                            <label for="birthdate">Birthdate</label>
+                        </div>
+                        {{ form_errors(form.birthdate) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.specialty, {'attr': {'class': 'form-control', 'placeholder': 'Specialty', 'id': 'specialty'}}) }}
+                            <label for="specialty">Specialty</label>
+                        </div>
+                        {{ form_errors(form.specialty) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.bloodType, {'attr': {'class': 'form-control', 'placeholder': 'Blood Type', 'id': 'bloodType'}}) }}
+                            <label for="bloodType">Blood Type</label>
+                        </div>
+                        {{ form_errors(form.bloodType) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.height, {'attr': {'class': 'form-control', 'placeholder': 'Height', 'id': 'height'}}) }}
+                            <label for="height">Height</label>
+                        </div>
+                        {{ form_errors(form.height) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.weight, {'attr': {'class': 'form-control', 'placeholder': 'Weight', 'id': 'weight'}}) }}
+                            <label for="weight">Weight</label>
+                        </div>
+                        {{ form_errors(form.weight) }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.hospitalName, {'attr': {'class': 'form-control', 'placeholder': 'Hospital Name', 'id': 'hospitalName'}}) }}
+                            <label for="hospitalName">Hospital Name</label>
+                        </div>
+                        {{ form_errors(form.hospitalName) }}
+                    </div>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

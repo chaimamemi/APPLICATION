@@ -225,18 +225,18 @@
             "./config/packages/security.yaml"
         ]
     },
-    "symfony/stimulus-bundle": {
-        "version": "2.14",
+    "symfony/swiftmailer-bundle": {
+        "version": "3.5",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
-            "version": "2.13",
-            "ref": "6acd9ff4f7fd5626d2962109bd4ebab351d43c43"
+            "version": "2.5",
+            "ref": "f0b2fccdca2dfd97dc2fd5ad216d5e27c4f895ac"
         },
         "files": [
-            "./assets/bootstrap.js",
-            "./assets/controllers.json",
-            "./assets/controllers/hello_controller.js"
+            "./config/packages/dev/swiftmailer.yaml",
+            "./config/packages/swiftmailer.yaml",
+            "./config/packages/test/swiftmailer.yaml"
         ]
     },
     "symfony/translation": {
@@ -265,18 +265,6 @@
             "./templates/base.html.twig"
         ]
     },
-    "symfony/twilio-notifier": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.0",
-            "ref": "10af129fcac6d00ffc9bb23d039d997dee35e657"
-        }
-    },
-    "symfony/ux-turbo": {
-        "version": "v2.14.2"
-    },
     "symfony/validator": {
         "version": "5.4",
         "recipe": {
@@ -303,7 +291,7 @@
         ]
     },
     "symfonycasts/verify-email-bundle": {
-        "version": "v1.16.2"
+        "version": "v1.15.0"
     },
     "twig/extra-bundle": {
         "version": "v3.8.0"

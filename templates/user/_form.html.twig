@@ -1,4 +1,38 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{% extends 'base-back.html.twig' %}
+{% block body %}
+    <div class="main" id="main">
+            <h1>Addd User</h1>
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form_row(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+
+                                <div class="col-12">
+                                    {{ form_row(form.lastName, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+
+                                <div class="col-12">
+                                    {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+
+                                <div class="col-12">
+                                    {{ form_row(form.roles, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+
+                            
+
+
+                              
+                              
+                            </div>
+                   
+
+
 {{ form_end(form) }}
+
+
+</div>
+
+{% endblock %}
+
