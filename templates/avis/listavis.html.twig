@@ -1,0 +1,40 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Avis index{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+ <script src="https://kit.fontawesome.com/b9abb70ee4.js" crossorigin="anonymous"></script>
+    <h1>Avis</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Rating</th>
+                <th>Commentaire</th>
+                <th>Titre</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for avi in avis %}
+            <tr>
+                <td>{{ avi.id }}</td>
+                <td> {% include 'avis/rating.html.twig' with { 'rating': avi.rating } %}</td>
+                 <td>{{ avi.commentaire }}</td>
+                <td>{{ avi.titre }}</td>
+               
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-danger"  href="{{ path('app_avis_new') }}">Ajouter Un Avis</a>
+     <div class="d-flex justify-content-center">
+                     <div class="navigation" style="color:red;font-size:30px">{{ knp_pagination_render(avis) }}</div> 
+                    </div>
+{% endblock %}

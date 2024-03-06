@@ -1,0 +1,7 @@
+#index:
+#    path: /front
+#    controller: App\Controller\DefaultController::index
+  
+
+  
+  

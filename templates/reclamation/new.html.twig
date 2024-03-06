@@ -1,0 +1,28 @@
+{% extends 'basefront.html.twig' %}
+
+
+
+
+
+{% block title %}New Reclamation{% endblock %}
+
+{% block body %}
+
+   
+<br>
+<br>
+<br>
+<br>
+<center>
+<h1>Have Any Query? Please Contact Us!</h1>
+</center>
+<br>
+
+<br>
+
+    {{ include('reclamation/_form.html.twig') }}
+    
+
+    <a class="btn btn-success" href="{{ path('app_reclamation_new') }}">Back</a>
+    </center>
+{% endblock %}

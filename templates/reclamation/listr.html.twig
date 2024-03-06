@@ -1,0 +1,66 @@
+{% block body %}
+    <style>
+        /* Styles pour la table */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        /* Styles pour le titre */
+        h1 {
+            color: #336699;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <center>
+        <h1>Reclamations</h1>
+    </center>
+    <br>
+    <br>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Email</th>
+                <th>Tel</th>
+                <th>Etat</th>
+                <th>Description</th>
+                <th>Date_reclamation</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reclamation in reclamations %}
+                <tr>
+                    <td>{{ reclamation.id }}</td>
+                    <td>{{ reclamation.nom }}</td>
+                    <td>{{ reclamation.prenom }}</td>
+                    <td>{{ reclamation.email }}</td>
+                    <td>{{ reclamation.tel }}</td>
+                    <td>{{ reclamation.etat }}</td>
+                    <td>{{ reclamation.description }}</td>
+                    <td>{{ reclamation.dateReclamation ? reclamation.dateReclamation|date('Y-m-d') : '' }}</td>
+                    <td>{{ reclamation.type }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
