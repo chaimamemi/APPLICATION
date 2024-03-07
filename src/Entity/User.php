@@ -49,6 +49,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $speciality = null;
 
+    #[ORM\OneToMany(mappedBy: 'patientId', targetEntity: InterventionAction::class)]
+    private Collection $interventionActions;
+
+   
    
   
 
@@ -56,6 +60,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     $this->appointments = new ArrayCollection();
     $this->biologicalData = new ArrayCollection();
+    $this->interventionActions = new ArrayCollection();
+    $this->bracelet = new ArrayCollection();
+   
 }
 
     public function getId(): ?int
@@ -230,7 +237,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, InterventionAction>
+     */
+    public function getInterventionActions(): Collection
+    {
+        return $this->interventionActions;
+    }
 
+    public function addInterventionAction(InterventionAction $interventionAction): static
+    {
+        if (!$this->interventionActions->contains($interventionAction)) {
+            $this->interventionActions->add($interventionAction);
+            $interventionAction->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInterventionAction(InterventionAction $interventionAction): static
+    {
+        if ($this->interventionActions->removeElement($interventionAction)) {
+            // set the owning side to null (unless already changed)
+            if ($interventionAction->getPatient() === $this) {
+                $interventionAction->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+    public function __toString(): string
+    {
+        return sprintf(
+            "User: [id=%d, firstName=%s, lastName=%s, email=%s, password=%s, role=%s, phoneNumber=%s, speciality=%s]",
+            $this->id,
+            $this->firstName,
+            $this->lastName,
+            $this->email,
+            $this->password,
+            $this->role,
+            $this->phoneNumber,
+            $this->speciality
+        );
+    }
+    
     
 
 }

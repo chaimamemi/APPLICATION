@@ -57,4 +57,15 @@ class BraceletRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+
+
+
+    public function getBraceletsData(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->select('b.id', 'b.temperature', 'b.bloodPressure', 'b.heartRate', 'b.movement', 'b.latitude', 'b.longitude')
+            ->getQuery()
+            ->getResult();
+    }
 }

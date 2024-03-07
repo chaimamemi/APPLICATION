@@ -1,0 +1,46 @@
+{% extends 'chat.html.twig' %}
+
+{% block title %}InterventionAction index{% endblock %}
+
+{% block body %}
+    <h1>InterventionAction index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DateTime</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for intervention_action in intervention_actions %}
+            <tr>
+                <td>{{ intervention_action.id }}</td>
+                <td>{{ intervention_action.dateTime ? intervention_action.dateTime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_intervention_action_show', {'id': intervention_action.id}) }}">show</a>
+                    <a href="{{ path('app_intervention_action_edit', {'id': intervention_action.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_intervention_action_new') }}">Create new</a>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(function(form) {
+                form.setAttribute('novalidate', 'true');
+            });
+        });
+    </script>
+{% endblock %}

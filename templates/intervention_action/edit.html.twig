@@ -1,0 +1,15 @@
+{% extends 'chat.html.twig' %}
+
+{% block title %}Edit InterventionAction{% endblock %}
+
+{% block body %}
+    <h1>Edit InterventionAction</h1>
+
+    <form method="post" action="{{ path('app_intervention_action_update', {'id': intervention_action.id}) }}" novalidate>
+        {{ include('intervention_action/_form.html.twig', {'button_label': 'Update', 'validation_message': false}) }}
+    </form>
+
+    <a href="{{ path('app_intervention_action_index') }}">back to list</a>
+
+    {{ include('intervention_action/_delete_form.html.twig') }}
+{% endblock %}

@@ -32,41 +32,42 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class OwnerController extends AbstractController
 {
+    private $session;
+
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
+
     #[Route('/owner', name: 'app_owner_dashboard')]
     public function index(Request $request, Security $security, AppointmentRepository $appointmentRepository): Response
     {
         // Récupérer l'utilisateur connecté
         /** @var User $user */
         $user = $security->getUser();
-
+    
         // Vérifier si l'utilisateur est connecté et a le rôle "owner"
         if (!$user || !in_array('ROLE_OWNER', $user->getRoles(), true)) {
             throw $this->createAccessDeniedException('You are not authorized to access this page.');
         }
-
+    
         // Récupérer les informations de l'utilisateur
         $firstName = $user->getFirstName();
         $lastName = $user->getLastName();
         $email = $user->getEmail();
-
+    
         // Récupérer les données du bracelet depuis la base de données
         $entityManager = $this->getDoctrine()->getManager();
         $braceletRepository = $entityManager->getRepository(Bracelet::class);
         $braceletData = $braceletRepository->findAll(); // Ou utilisez une méthode spécifique pour récupérer les données
-   
+    
         // Récupérer les rendez-vous de l'utilisateur
         $appointments = $appointmentRepository->findBy(['patient' => $user]);
-
+    
         // Génération du code aléatoire
         $code = uniqid();
-
-      
-    // Récupérer le code généré par le propriétaire depuis la requête
-    $ownerCode = $request->query->get('code');
-
-  
-       
-
+        $this->session->set('owner_access_code', $code); // Utilisation de $this->session ici
+    
         return $this->render('owner/app_owner_dashboard.html.twig', [
             'braceletData' => $braceletData,
             'code' => $code,
@@ -76,6 +77,7 @@ class OwnerController extends AbstractController
             'appointments' => $appointments,
         ]);
     }
+    
 
 
     #[Route('/owner/calendar', name: 'app_owner_calendar')]

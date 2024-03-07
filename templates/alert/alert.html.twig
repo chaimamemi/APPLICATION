@@ -1,0 +1,56 @@
+{% extends 'chat.html.twig' %}
+
+{% block title %}Alertes{% endblock %}
+
+{% block body %}
+    <h2>Bracelet Data Triggering Alerts</h2>
+    
+    <!-- Render the search form -->
+    {{ form_start(form) }}
+        {{ form_row(form.q) }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    {{ form_end(form) }}
+
+    <!-- Add a Back button -->
+    <a href="{{ path('app_alert_index') }}" class="btn btn-secondary">Back to list</a>
+
+    {% if alerts is empty %}
+        <p>Aucune donnée de bracelet trouvée.</p>
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Timestamp</th>
+                    <th>Alert Type</th>
+                    <th>Severity</th>
+                    <th>Description</th>
+                    <th>Handled</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alert in alerts %}
+                    <tr>
+                        <td>{{ alert.id }}</td>
+                        <td>{{ alert.timestamp|date('Y-m-d H:i:s') }}</td>
+                        <td>{{ alert.alertType }}</td>
+                        <td>{{ alert.severity }}</td>
+                        <td>{{ alert.description }}</td>
+                        <td>{{ alert.handled ? 'Yes' : 'No' }}</td>
+                        <td>
+                            <!-- Add form for handling alert -->
+                            <form method="post" action="{{ path('app_alert_handle', {'id': alert.id}) }}" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to handle this alert?')">
+                                <button type="submit" class="btn btn-info">{{ alert.handled ? 'Handled' : 'Handle' }}</button>
+                            </form>
+                            <!-- Delete button -->
+                            <form method="post" action="{{ path('app_alert_delete', {'id': alert.id}) }}" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this alert?')">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

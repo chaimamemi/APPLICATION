@@ -8,47 +8,45 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Psr\Log\LoggerInterface;
+use App\Entity\Bracelet;
+use Symfony\Component\Security\Core\Security;
 
 class FamilyMemberController extends AbstractController
 {
-    private $logger;
+    private $session;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(SessionInterface $session)
     {
-        $this->logger = $logger;
+        $this->session = $session;
     }
 
     #[Route('/familymember', name: 'app_family_member_dashboard')]
-    public function index(Request $request, SessionInterface $session): Response
+    public function index(Request $request, Security $security): Response
     {
-        // Récupérer le code d'accès stocké dans la session
-        $ownerAccessCode = $session->get('access_code');
+        // Récupérer l'utilisateur connecté
+        /** @var User $user */
+        $user = $security->getUser();
 
-        // Vérifier si le formulaire a été soumis
-        if ($request->isMethod('POST')) {
-            // Récupérer le code d'accès saisi par le membre de la famille
-            $accessCode = $request->request->get('access_code');
-
-            // Log des valeurs des codes pour débogage
-            $this->logger->info('Access Code from form: ' . $accessCode);
-            $this->logger->info('Owner Access Code from session: ' . $ownerAccessCode);
-
-            // Vérifier si les codes d'accès correspondent
-            if ($accessCode === $ownerAccessCode) {
-                // Les codes d'accès correspondent, afficher le dashboard du membre de la famille
-                return $this->redirectToRoute('family_member_dashboard');
-            } else {
-                // Les codes d'accès ne correspondent pas, afficher un message d'erreur
-                return $this->render('family_member/access_denied.html.twig', [
-                    'error_message' => 'Invalid access code. Please try again.',
-                ]);
-            }
+        // Vérifier si l'utilisateur est connecté et a le rôle "family member"
+        if (!$user || !in_array('ROLE_FAMILY_MEMBER', $user->getRoles(), true)) {
+            throw $this->createAccessDeniedException('You are not authorized to access this page.');
         }
 
-        // Affichage du formulaire de saisie du code pour le membre de la famille
-        return $this->render('family_member/access_code_form.html.twig', [
-            'accessCodeFromSession' => $ownerAccessCode,
+        // Récupérer les informations de l'utilisateur
+        $firstName = $user->getFirstName();
+        $lastName = $user->getLastName();
+
+        // Récupérer les données du bracelet depuis la base de données
+        $entityManager = $this->getDoctrine()->getManager();
+        $braceletRepository = $entityManager->getRepository(Bracelet::class);
+        $braceletData = $braceletRepository->findAll(); // Ou utilisez une méthode spécifique pour récupérer les données
+
+        // Message personnalisé pour le membre de la famille
+        $dashboardContent = "Hello dear family member $firstName $lastName, here is the bracelet data for your beloved one. Take care.";
+
+        return $this->render('family_member/app_family_member_dashboard.html.twig', [
+            'braceletData' => $braceletData,
+            'dashboardContent' => $dashboardContent,
         ]);
     }
 }
-

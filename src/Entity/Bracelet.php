@@ -24,9 +24,9 @@ class Bracelet
     #[ORM\ManyToOne(inversedBy: 'braceletId')]
     private ?BiologicalData $biologicalData = null;
 
-    #[ORM\ManyToOne(inversedBy: 'braceletId')]
+    #[ORM\ManyToOne(targetEntity: Alert::class, inversedBy: "bracelets")]
     private ?Alert $alert = null;
-
+    
     #[ORM\Column(length: 255)]
     private ?string $temperature = null;
 
@@ -212,5 +212,8 @@ class Bracelet
 
         return $this;
     }
+
+
+
+
 }
- 

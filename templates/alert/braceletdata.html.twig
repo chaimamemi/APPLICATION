@@ -1,0 +1,34 @@
+{# templates/alert/braceletdata.html.twig #}
+
+
+
+{% block title %}Données des bracelets{% endblock %}
+
+{% block body %}
+    <h1>Données des bracelets</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Identifiant</th>
+                <th>Température</th>
+                <th>Pression artérielle</th>
+                <th>Rythme cardiaque</th>
+                <th>Mouvement</th>
+                <th>GPS</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bracelet in bracelets %}
+                <tr>
+                    <td>{{ bracelet.getId() }}</td>
+                    <td>{{ bracelet.getTemperature() }}</td>
+                    <td>{{ bracelet.getBloodPressure() }}</td>
+                    <td>{{ bracelet.getHeartRate() }}</td>
+                    <td>{{ bracelet.getMovement() }}</td>
+                    <td>{{ bracelet.getGps() }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

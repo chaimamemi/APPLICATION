@@ -13,9 +13,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\MedicationRepository;
 use App\Repository\BiologicalDataRepository;
-
 use App\Repository\CalendarRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Entity\User;
+use App\Entity\Alert;
+use App\Entity\Bracelet;
+use App\Entity\InterventionAction;
+use App\Form\InterventionActionType;
+use MercurySeries\FlashyBundle\FlashyNotifier;
+use App\Repository\UserRepository;
+use App\Repository\BraceletRepository;
+use App\Repository\AlertRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class HealthProfessionalController extends AbstractController
 {
@@ -186,13 +195,40 @@ class HealthProfessionalController extends AbstractController
 
 
 
-
     #[Route('/healthprofessional/emergency-dashboard', name: 'app_health_professional_emergency_dashboard')]
-    public function emergencyDashboard(): Response
+    public function emergencyDashboard(Request $request, UserRepository $userRepository, BraceletRepository $braceletRepository, AlertRepository $alertRepository, EntityManagerInterface $entityManager, FlashyNotifier $flashy): Response
     {
-        // Logique pour le tableau de bord de l'équipe d'urgence
-        return $this->render('health_professional/emergency_dashboard.html.twig');
+        $user = $this->getUser();
+        if (!$user || !in_array('ROLE_EMERGENCY_TEAM', $user->getRoles())) {
+            throw $this->createAccessDeniedException('You are not authorized to access this page.');
+        }
+
+        // Fetch necessary information for the dashboard
+        $owners = $userRepository->findBy(['role' => 'ROLE_OWNER']);
+        $bracelets = $braceletRepository->findAll();
+        $alerts = $alertRepository->findAll();
+
+        // Here, you could add your logic to detect new alerts if available
+        $newAlerts = $alertRepository->findNewAlerts();
+
+        // Display a notification for each new alert
+        if ($newAlerts) {
+            foreach ($newAlerts as $alert) {
+                $this->addFlash('info', 'New alert detected: ' . $alert->getDescription());
+                // Optionally update the alert as being seen or handled if necessary
+            }
+            $entityManager->flush(); // Save all changes in the database
+        }
+
+        // Handle intervention (example, adapt as per your needs)
+        $interventionAction = new InterventionAction();
+        $form = $this->createForm(InterventionActionType::class, $interventionAction);
+
+        return $this->render('health_professional/emergency_dashboard.html.twig', [
+            'owners' => $owners,
+            'bracelets' => $bracelets,
+            'alerts' => $alerts,
+            'form' => $form->createView(),
+        ]);
     }
 }
-
-

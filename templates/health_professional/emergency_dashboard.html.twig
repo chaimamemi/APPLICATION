@@ -1,0 +1,62 @@
+{# Dans votre modèle Twig emergency_dashboard.html.twig #}
+
+{% extends 'chat.html.twig' %}
+
+{% block body %}
+<div class="container my-4">
+    <h1 class="mb-4">Emergency Team Dashboard</h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>Patient List</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Email</th>
+                            <th>Bracelet Information</th>
+                            <th>Alerts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for owner in owners %}
+                        <tr>
+                            <td>{{ owner.lastName }}</td>
+                            <td>{{ owner.firstName }}</td>
+                            <td>{{ owner.email }}</td>
+                            <td>
+                                <a href="{{ path('app_bracelet') }}" class="btn btn-info">View Info</a>
+                            </td>
+                            <td>
+                                <a href="{{ path('app_check_bracelets') }}" class="btn btn-warning">View Alerts</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Intervention Actions</h3>
+            <div class="mb-3">
+                <a href="{{ path('app_intervention_action_index') }}" class="btn btn-primary">View Interventions</a>
+                <a href="{{ path('app_intervention_action_new') }}" class="btn btn-success">Add Intervention</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Inclure jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Inclure Flashy -->
+    <script>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                Flashy.success('{{ message }}');
+            {% endfor %}
+        {% endfor %}
+    </script>
+{% endblock %}

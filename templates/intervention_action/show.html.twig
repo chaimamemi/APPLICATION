@@ -1,0 +1,37 @@
+{% extends 'chat.html.twig' %}
+
+{% block title %}InterventionAction{% endblock %}
+
+{% block body %}
+    <h1>InterventionAction</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ intervention_action.id }}</td>
+            </tr>
+            <tr>
+                <th>DateTime</th>
+                <td>{{ intervention_action.dateTime ? intervention_action.dateTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_intervention_action_index') }}">back to list</a>
+
+    <a href="{{ path('app_intervention_action_edit', {'id': intervention_action.id}) }}">edit</a>
+
+    {{ include('intervention_action/_delete_form.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            if (form) {
+                form.setAttribute('novalidate', 'true');
+            }
+        });
+    </script>
+{% endblock %}

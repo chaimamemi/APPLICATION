@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\AlertRepository;
@@ -39,6 +38,7 @@ class Alert
         $this->braceletId = new ArrayCollection();
     }
 
+   
     public function getId(): ?int
     {
         return $this->id;
@@ -133,4 +133,8 @@ class Alert
 
         return $this;
     }
+
+
+
+  
 }

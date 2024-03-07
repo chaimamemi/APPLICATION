@@ -1,0 +1,36 @@
+{% extends 'chat.html.twig' %}
+
+{% block title %}Check Bracelets{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mt-5">Bracelet Data</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Temperature</th>
+                    <th>Blood Pressure</th>
+                    <th>Heart Rate</th>
+                    <th>Movement</th>
+                    <th>GPS Latitude</th>
+                    <th>GPS Longitude</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for braceletData in braceletsData %}
+                    <tr>
+                        <td>{{ braceletData.id }}</td>
+                        <td>{{ braceletData.temperature }}</td>
+                        <td>{{ braceletData.bloodPressure }}</td>
+                        <td>{{ braceletData.heartRate }}</td>
+                        <td>{{ braceletData.movement }}</td>
+                        <td>{{ braceletData.latitude }}</td>
+                        <td>{{ braceletData.longitude }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <hr> <!-- Ligne noire pour séparer les tables -->
+{% endblock %}

@@ -1,19 +1,13 @@
 <?php
 
+// src/Repository/AlertRepository.php
+
 namespace App\Repository;
 
 use App\Entity\Alert;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Alert>
- *
- * @method Alert|null find($id, $lockMode = null, $lockVersion = null)
- * @method Alert|null findOneBy(array $criteria, array $orderBy = null)
- * @method Alert[]    findAll()
- * @method Alert[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class AlertRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -21,28 +15,27 @@ class AlertRepository extends ServiceEntityRepository
         parent::__construct($registry, Alert::class);
     }
 
-//    /**
-//     * @return Alert[] Returns an array of Alert objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findSearch(string $searchTerm): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.alertType LIKE :searchTerm')
+            ->orWhere('a.severity LIKE :searchTerm')
+            ->orWhere('a.description LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Alert
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findNewAlerts(): array
+    {
+        // Exemple: récupérer toutes les alertes où le champ 'handled' est égal à 'No'
+        // Adaptez cette requête selon les champs et la logique de votre base de données
+        return $this->createQueryBuilder('a')
+            ->where('a.handled = :handled')
+            ->setParameter('handled', 'No')
+            ->orderBy('a.timestamp', 'DESC') // Les plus récentes d'abord
+            ->getQuery()
+            ->getResult();
+    }
 }
+

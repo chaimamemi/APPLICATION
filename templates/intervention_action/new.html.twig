@@ -1,0 +1,8 @@
+{% extends 'chat.html.twig' %}
+{% block title %}New InterventionAction{% endblock %}
+{% block body %}
+    <h1>Create new InterventionAction</h1>
+    {% set form_context = {'form': form, 'validation_message': false} %}
+    {{ include('intervention_action/_form.html.twig', form_context) }}
+    <a href="{{ path('app_intervention_action_index') }}">back to list</a>
+{% endblock %}
