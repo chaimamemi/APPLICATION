@@ -1,52 +1,75 @@
-{% extends 'date.html.twig' %}
+{%extends'date.html.twig'%}
 
 {% block title %}Calendar {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .custom-table {
+            background-color: #cce5ff; /* Bleu clair */
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <h1>Calendar index</h1>
+    <div class="container">
+        <h1>Calendar index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Description</th>
-                <th>All_day</th>
-                <th>Background_color</th>
-                <th>Border_color</th>
-                <th>Text_color</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for calendar in calendars %}
-            <tr>
-                <td>{{ calendar.id }}</td>
-                <td>{{ calendar.title }}</td>
-                <td>{{ calendar.start ? calendar.start|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ calendar.end ? calendar.end|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ calendar.description }}</td>
-                <td>{{ calendar.allDay ? 'Yes' : 'No' }}</td>
-                <td>{{ calendar.backgroundColor }}</td>
-                <td>{{ calendar.borderColor }}</td>
-                <td>{{ calendar.textColor }}</td>
-                <td>
-                    <a href="{{ path('app_calendar_owner_show', {'id': calendar.id}) }}">show</a>
-                    <a href="{{ path('app_calendar_owner_edit', {'id': calendar.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="table table-bordered custom-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Description</th>
+                    <th>All Day</th>
+                    <th>Background Color</th>
+                    <th>Border Color</th>
+                    <th>Text Color</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for calendar in calendars %}
+                <tr>
+                    <td>{{ calendar.id }}</td>
+                    <td>{{ calendar.title }}</td>
+                    <td>{{ calendar.start ? calendar.start|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ calendar.end ? calendar.end|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ calendar.description }}</td>
+                    <td>{{ calendar.allDay ? 'Yes' : 'No' }}</td>
+                    <td>{{ calendar.backgroundColor }}</td>
+                    <td>{{ calendar.borderColor }}</td>
+                    <td>{{ calendar.textColor }}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{{ path('calendarOwner_show', {'id': calendar.id}) }}" class="btn btn-primary">Show</a>
+                            <a href="{{ path('calendarOwner_edit', {'id': calendar.id}) }}" class="btn btn-primary">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_calendar_owner_new') }}">Create new</a>
-    
-    {# Bouton "Back" pour revenir au tableau de bord du propriétaire #}
-    <a href="{{ path('app_owner_dashboard') }}" class="btn btn-secondary">Back to Your Dashboard</a>
+        <div class="btn-container">
+            <a href="{{ path('app_calendar_owner_index') }}" class="btn btn-primary">Create new</a>
+            
+            {# Bouton "Back" pour revenir au tableau de bord du propriétaire #}
+            <a href="{{ path('app_owner_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}

@@ -1,8 +1,44 @@
 {% extends 'chat.html.twig' %}
+
 {% block title %}New InterventionAction{% endblock %}
+
+{% block stylesheets %}
+<style>
+    body {
+        background-color: #e0f7fa; /* Bleu clair pour le fond */
+    }
+    h1 {
+        color: #0277bd; /* Bleu plus foncé pour le titre */
+        margin-bottom: 20px;
+    }
+    .form-container {
+        background-color: #ffffff; /* Fond blanc pour le formulaire */
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    a {
+        color: #0288d1; /* Bleu pour les liens */
+        text-decoration: none;
+        font-weight: bold;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
-    <h1>Create new InterventionAction</h1>
-    {% set form_context = {'form': form, 'validation_message': false} %}
-    {{ include('intervention_action/_form.html.twig', form_context) }}
-    <a href="{{ path('app_intervention_action_index') }}">back to list</a>
+    <div class="container">
+        <h1>Create new InterventionAction</h1>
+        <div class="form-container">
+            {% set form_context = {'form': form, 'validation_message': false} %}
+            {{ include('intervention_action/_form.html.twig', form_context) }}
+        </div>
+        <a href="{{ path('app_intervention_action_index') }}" class="back-link">back to list</a>
+    </div>
 {% endblock %}

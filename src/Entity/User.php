@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne(inversedBy: 'userId')]
     private ?Bracelet $bracelet = null;
-
+    
     #[ORM\OneToMany(mappedBy: 'patientUserId', targetEntity: Appointment::class)]
     private Collection $appointments;
 
@@ -61,8 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     $this->appointments = new ArrayCollection();
     $this->biologicalData = new ArrayCollection();
     $this->interventionActions = new ArrayCollection();
-    $this->bracelet = new ArrayCollection();
-   
+  
 }
 
     public function getId(): ?int

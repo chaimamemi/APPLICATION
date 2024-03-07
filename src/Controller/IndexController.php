@@ -36,11 +36,19 @@ class IndexController extends AbstractController
         return $this->render('contact.html.twig');
     }
 
-    #[Route('/About', name: 'app_about')]
-    public function about(): Response
+    #[Route('/about', name: 'app_about')]
+    public function About(): Response
     {
        
         return $this->render('about.html.twig');
+    }
+
+    
+    #[Route('/profile', name: 'app_profile')]
+    public function profile(): Response
+    {
+       
+        return $this->render('owner/profile.html.twig');
     }
 
     

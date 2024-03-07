@@ -1,6 +1,6 @@
 {# Dans votre modèle Twig emergency_dashboard.html.twig #}
+{%extends'emergency.html.twig'%}
 
-{% extends 'chat.html.twig' %}
 
 {% block body %}
 <div class="container my-4">
@@ -41,6 +41,7 @@
             <div class="mb-3">
                 <a href="{{ path('app_intervention_action_index') }}" class="btn btn-primary">View Interventions</a>
                 <a href="{{ path('app_intervention_action_new') }}" class="btn btn-success">Add Intervention</a>
+                  
             </div>
         </div>
     </div>

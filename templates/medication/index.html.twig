@@ -1,3 +1,73 @@
+{% block stylesheets %}
+<style>
+    .intro {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: #e7f1fc; /* Light blue background */
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    .card {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .table-responsive {
+        position: relative; /* Confirm this with your existing 'data-mdb-perfect-scrollbar' attribute */
+        max-height: 600px;
+        overflow-x: auto;
+    }
+
+    .table {
+        font-size: 16px; /* Adjusted for better readability */
+        width: 100%;
+        margin-bottom: 0; /* Override Bootstrap's default */
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f0f8ff; /* Very light blue for odd rows */
+    }
+
+    thead {
+        background-color: #1E90FF; /* Deep sky blue */
+        color: white;
+    }
+
+    .table td, .table th {
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px; /* Increase padding for spacing */
+    }
+
+    .btn {
+        margin: 0 5px; /* Spacing between buttons */
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+    }
+
+    .mt-3 {
+        margin-top: 1rem;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
     <section class="intro">
         <div class="container">
@@ -5,9 +75,9 @@
                 <div class="col-lg-10">
                     <div class="card">
                         <div class="card-body p-0">
-                            <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative;">
-                                <table class="table table-striped mb-0 text-center" style="font-size: 18px;">
-                                    <thead style="background-color: #1E90FF; color: white;">
+                            <div class="table-responsive table-scroll">
+                                <table class="table table-striped mb-0 text-center">
+                                    <thead>
                                         <tr>
                                             <th scope="col">ID</th>
                                             <th scope="col">Description</th>
@@ -22,32 +92,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      {% for medication in medications %}
-    <tr>
-        <td>{{ medication.id }}</td>
-        <td>{{ medication.description }}</td>
-        <td>{{ medication.nameMedication }}</td>
-        <td>{{ medication.medicalNote }}</td>
-        <td>{{ medication.dosage }}</td>
-        {% if medication.biologicalData %}
-            <td>{{ medication.biologicalData.patientName }}</td>
-            <td>{{ medication.biologicalData.patientLastName }}</td>
-            <td>{{ medication.biologicalData.disease }}</td>
-            <td>{{ medication.biologicalData.otherInformation }}</td>
-        {% else %}
-            <td colspan="4">No Biological Data</td>
-        {% endif %}
-        <td>
-            <a href="{{ path('app_medication_show', {'id': medication.id}) }}" class="btn btn-primary">Show</a>
-            <a href="{{ path('app_medication_edit', {'id': medication.id}) }}" class="btn btn-warning">Edit</a>
-            <a href="{{ path('app_medication_download_pdf', {'id': medication.id}) }}" class="btn btn-secondary">Download PDF</a>
-        </td>
-    </tr>
-{% else %}
-    <tr>
-        <td colspan="10">No records found</td>
-    </tr>
-{% endfor %}
+                                        {% for medication in medications %}
+                                            <tr>
+                                                <td>{{ medication.id }}</td>
+                                                <td>{{ medication.description }}</td>
+                                                <td>{{ medication.nameMedication }}</td>
+                                                <td>{{ medication.medicalNote }}</td>
+                                                <td>{{ medication.dosage }}</td>
+                                                {% if medication.biologicalData %}
+                                                    <td>{{ medication.biologicalData.patientName }}</td>
+                                                    <td>{{ medication.biologicalData.patientLastName }}</td>
+                                                    <td>{{ medication.biologicalData.disease }}</td>
+                                                    <td>{{ medication.biologicalData.otherInformation }}</td>
+                                                {% else %}
+                                                    <td colspan="4">No Biological Data</td>
+                                                {% endif %}
+                                                <td>
+                                                    <a href="{{ path('app_medication_show', {'id': medication.id}) }}" class="btn btn-primary">Show</a>
+                                                    <a href="{{ path('app_medication_edit', {'id': medication.id}) }}" class="btn btn-warning">Edit</a>
+                                                    <a href="{{ path('app_medication_download_pdf', {'id': medication.id}) }}" class="btn btn-secondary">Download PDF</a>
+                                                </td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="10">No records found</td>
+                                            </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -57,7 +127,6 @@
             </div>
         </div>
     </section>
-     <!-- Bouton Back to your dashboard -->
     <div class="container mt-3">
         <a href="{{ path('app_health_professional_doctor_dashboard') }}" class="btn btn-secondary">Back to your dashboard</a>
     </div>

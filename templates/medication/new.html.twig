@@ -1,12 +1,73 @@
-
-
-{% block title %}New Medication{% endblock %}
+{% block stylesheets %}
+<style>
+    .form-container {
+        background-color: #f0f8ff; /* Un bleu très clair pour le fond */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        max-width: 500px;
+        margin: 40px auto;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .mb-4 {
+        margin-bottom: 1.5rem; /* Ajustez selon vos besoins */
+    }
+    button.btn {
+        background-color: #007bff; /* Bleu Bootstrap pour le bouton */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin: 20px auto;
+    }
+    button.btn:hover {
+        background-color: #0056b3; /* Un bleu légèrement plus foncé au survol */
+    }
+    a.back-link {
+        color: #007bff; /* Harmonisation avec la couleur du bouton */
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    a.back-link:hover {
+        text-decoration: underline;
+    }
+    /* Ajoutez des styles supplémentaires pour le formulaire si nécessaire */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    label {
+        display: block;
+        margin-bottom: .5rem;
+    }
+    input, textarea, select {
+        width: 100%;
+        padding: .375rem .75rem;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+    }
+    /* Style pour les messages d'erreur de validation */
+    .invalid-feedback {
+        color: #dc3545;
+        display: none; /* Cachez par défaut, affichez-le via JS si nécessaire */
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Medication</h1>
+    <div class="form-container">
+        <h1 class="text-center mb-4">Create new Medication</h1>
 
-    {{ include('medication/_form.html.twig') }}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
 
-    <a href="{{ path('app_medication_index') }}">back to list</a>
-    
+        <a href="{{ path('app_medication_index') }}" class="back-link">Back to list</a>
+    </div>
 {% endblock %}

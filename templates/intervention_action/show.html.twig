@@ -2,36 +2,87 @@
 
 {% block title %}InterventionAction{% endblock %}
 
+{% block stylesheets %}
+<style>
+    body {
+        background-color: #e0f7fa; /* Light blue background */
+    }
+    h1 {
+        color: #0277bd; /* Darker blue for the header */
+        text-align: center;
+        margin-bottom: 20px; /* Space below the title */
+    }
+    .table {
+        margin: auto;
+        width: 60%; /* Adjust based on your preference */
+        border-collapse: collapse;
+    }
+    .table, .table th, .table td {
+        border: 1px solid #bbdefb; /* Light blue border */
+        padding: 10px;
+        text-align: left;
+    }
+    .table th {
+        background-color: #b3e5fc; /* Slightly darker blue for the header */
+        color: white;
+    }
+    .table tr:nth-child(odd) {
+        background-color: #e1f5fe; /* Even lighter blue for odd rows */
+    }
+    a {
+        color: #0288d1; /* Blue color for links */
+        text-decoration: none; /* No underline */
+        background-color: #e1f5fe; /* Light blue background for links */
+        padding: 8px 15px;
+        border-radius: 5px; /* Rounded corners for links */
+        display: inline-block; /* Allows for padding and background */
+        margin-right: 10px;
+    }
+    a:hover {
+        text-decoration: underline; /* Underline on hover for better UX */
+        background-color: #b3e5fc; /* Slightly darker on hover */
+    }
+    form {
+        margin-top: 20px;
+    }
+    .actions {
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
     <h1>InterventionAction</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ intervention_action.id }}</td>
-            </tr>
-            <tr>
-                <th>DateTime</th>
-                <td>{{ intervention_action.dateTime ? intervention_action.dateTime|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ intervention_action.id }}</td>
+                </tr>
+                <tr>
+                    <th>DateTime</th>
+                    <td>{{ intervention_action.dateTime ? intervention_action.dateTime|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <a href="{{ path('app_intervention_action_index') }}">back to list</a>
-
-    <a href="{{ path('app_intervention_action_edit', {'id': intervention_action.id}) }}">edit</a>
-
-    {{ include('intervention_action/_delete_form.html.twig') }}
+    <div class="actions">
+        <a href="{{ path('app_intervention_action_index') }}">Back to list</a>
+        <a href="{{ path('app_intervention_action_edit', {'id': intervention_action.id}) }}">Edit</a>
+        {{ include('intervention_action/_delete_form.html.twig') }}
+    </div>
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form');
-            if (form) {
-                form.setAttribute('novalidate', 'true');
-            }
-        });
-    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        if (form) {
+            form.setAttribute('novalidate', 'true');
+        }
+    });
+</script>
 {% endblock %}

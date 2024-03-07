@@ -2,6 +2,57 @@
 
 {% block title %}InterventionAction index{% endblock %}
 
+{% block stylesheets %}
+<style>
+    body {
+        background-color: #e0f7fa; /* Bleu clair pour le fond */
+    }
+    h1 {
+        color: #0277bd; /* Bleu plus foncé pour le titre */
+        text-align: center;
+    }
+    .table {
+        margin: auto;
+        width: 80%; /* Adjust based on your preference */
+        border-collapse: collapse;
+    }
+    .table, .table th, .table td {
+        border: 1px solid #bbdefb;
+        padding: 8px;
+    }
+    .table th {
+        background-color: #b3e5fc; /* Un bleu légèrement plus foncé pour l'entête */
+        color: white;
+    }
+    .table tr:nth-child(odd) {
+        background-color: #e1f5fe; /* Une couleur plus claire pour les lignes impaires */
+    }
+    a {
+        color: #0288d1; /* Couleur des liens */
+        text-decoration: none; /* Enlève le soulignement des liens */
+    }
+    a:hover {
+        text-decoration: underline; /* Souligne le lien au survol */
+    }
+    .action-links {
+        display: flex;
+        justify-content: space-around;
+    }
+    .create-new {
+        background-color: #0288d1; /* Fond des boutons d'action */
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-top: 20px;
+        display: inline-block;
+    }
+    .create-new:hover {
+        background-color: #0277bd;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
     <h1>InterventionAction index</h1>
 
@@ -10,7 +61,7 @@
             <tr>
                 <th>Id</th>
                 <th>DateTime</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -18,7 +69,7 @@
             <tr>
                 <td>{{ intervention_action.id }}</td>
                 <td>{{ intervention_action.dateTime ? intervention_action.dateTime|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
+                <td class="action-links">
                     <a href="{{ path('app_intervention_action_show', {'id': intervention_action.id}) }}">show</a>
                     <a href="{{ path('app_intervention_action_edit', {'id': intervention_action.id}) }}">edit</a>
                 </td>
@@ -31,16 +82,16 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_intervention_action_new') }}">Create new</a>
+    <a href="{{ path('app_intervention_action_new') }}" class="create-new">Create new</a>
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const forms = document.querySelectorAll('form');
-            forms.forEach(function(form) {
-                form.setAttribute('novalidate', 'true');
-            });
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('form');
+        forms.forEach(function(form) {
+            form.setAttribute('novalidate', 'true');
         });
-    </script>
+    });
+</script>
 {% endblock %}

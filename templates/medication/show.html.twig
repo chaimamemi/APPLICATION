@@ -1,6 +1,50 @@
-
-
-{% block title %}Medication{% endblock %}
+{% block stylesheets %}
+<style>
+    body {
+        background-color: #e0f7fa; /* Light blue background */
+        font-family: 'Arial', sans-serif;
+        padding: 20px;
+    }
+    h1 {
+        color: #0277bd; /* Darker blue for the heading */
+        text-align: center;
+        padding-bottom: 20px;
+    }
+    .table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+    .table, .table th, .table td {
+        border: 1px solid #bbdefb; /* Light blue borders */
+        padding: 8px;
+        text-align: left;
+    }
+    .table th {
+        background-color: #b3e5fc; /* Lighter blue for header cells */
+        color: white;
+    }
+    .table tr:nth-child(odd) {
+        background-color: #f0f8ff; /* Very light blue for odd rows */
+    }
+    a {
+        color: #0288d1; /* Blue color for links */
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: 1px solid transparent;
+        background-color: #f0f8ff; /* Very light blue background for links */
+        margin-right: 10px;
+    }
+    a:hover {
+        background-color: #e1f5fe; /* Slightly darker blue on hover */
+        border-color: #bbdefb;
+    }
+    .action-links {
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
 
 {% block body %}
     <h1>Medication</h1>
@@ -30,10 +74,10 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_medication_index') }}">back to list</a>
-
-    <a href="{{ path('app_medication_edit', {'id': medication.id}) }}">edit</a>
+    <div class="action-links">
+        <a href="{{ path('app_medication_index') }}">Back to list</a>
+        <a href="{{ path('app_medication_edit', {'id': medication.id}) }}">Edit</a>
+    </div>
 
     {{ include('medication/_delete_form.html.twig') }}
-    
 {% endblock %}
